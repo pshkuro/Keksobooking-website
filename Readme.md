@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Полина Шкуро](https://up.htmlacademy.ru/javascript/19/user/1221841).
-* Наставник: `Захар Овчаров`.
+* Наставник: `Захар Овчаров (https://htmlacademy.ru/profile/id906939)`.
 
 ---
 
