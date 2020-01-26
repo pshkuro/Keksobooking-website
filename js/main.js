@@ -20,6 +20,8 @@ function getArrayRandomLength(arr) {
 
 // Создание тестовых объявлений
 var createMockAdverts = function (count) {
+  var adverts = [];
+
   var getAvatar = function (id) {
     return 'img/avatars/user' + id + '.png';
   };
@@ -30,8 +32,8 @@ var createMockAdverts = function (count) {
     return getRandomArrayItem(TITLES);
   };
 
-  var getAddress = function (x, y) {
-    return x + '' + y;
+  var getAddress = function () {
+    return getRandomInRange(1, 100) + ', ' + getRandomInRange(100, 500);
   };
 
   var getPrice = function () {
@@ -92,31 +94,38 @@ var createMockAdverts = function (count) {
     return getRandomInRange(130, 630);
   };
 
-  return {
-    author: {
-      avatar: getAvatar(5)
-    },
-    offer: {
-      title: getTitle(),
-      address: getAddress(100, 50),
-      price: getPrice(),
-      type: getType(),
-      rooms: getRooms(),
-      guests: getGuests(),
-      checkin: getCheckin(),
-      checkout: getCheckout(),
-      features: getFeatures(),
-      description: getDescription(),
-      photos: getPhotos()
-    },
-    location: {
-      x: getX(),
-      y: getY()
-    }
+  for (var i = 0; i < count; i++) {
+    var advert = {
+      author: {
+        avatar: getAvatar(i + 1)
+      },
+      offer: {
+        title: getTitle(),
+        address: getAddress(),
+        price: getPrice(),
+        type: getType(),
+        rooms: getRooms(),
+        guests: getGuests(),
+        checkin: getCheckin(),
+        checkout: getCheckout(),
+        features: getFeatures(),
+        description: getDescription(),
+        photos: getPhotos()
+      },
+      location: {
+        x: getX(),
+        y: getY()
+      }
+    };
+
+    adverts.push(advert);
   };
+
+
+  return adverts;
 };
 
-console.dir(createMockAdverts());
+console.dir(createMockAdverts(8));
 
 // Отображение объявлений на странице
 var renderAdvert = function(data) {
