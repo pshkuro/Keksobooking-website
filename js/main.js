@@ -1,7 +1,5 @@
 'use strict';
 
-var advertsData = createMockAdverts(8);
-
 // Функция генерации случ числа от min до max
 function getRandomInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -125,6 +123,8 @@ function createMockAdverts(count) {
 
   return adverts;
 }
+
+var advertsData = createMockAdverts(8);
 
 document.querySelector('.map').classList.remove('map--faded');
 
