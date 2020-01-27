@@ -21,11 +21,11 @@ function getArrayRandomLength(arr) {
 }
 
 // Создание тестовых объявлений
-var createMockAdverts = function (count) {
+function createMockAdverts(count) {
   var adverts = [];
 
   var getAvatar = function (id) {
-    return 'img/avatars/user' + id + '.png';
+    return 'img/avatars/user0' + id + '.png';
   };
 
   var getTitle = function () {
@@ -83,7 +83,7 @@ var createMockAdverts = function (count) {
   };
 
   var getPhotos = function () {
-    var PHOTOSES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']; 
+    var PHOTOSES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
     return getArrayRandomLength(PHOTOSES);
   };
@@ -124,13 +124,14 @@ var createMockAdverts = function (count) {
   }
 
   return adverts;
-};
+}
 
 document.querySelector('.map').classList.remove('map--faded');
 
 var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
 var mapPinsItem = document.querySelector('#pin').content.querySelector('.map__pin');
 
+// Создание 1 объявления
 var createAdvertItem = function (data) {
   var advertElement = mapPinsItem.cloneNode(true);
 
