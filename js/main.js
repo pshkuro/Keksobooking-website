@@ -1,5 +1,7 @@
 'use strict';
 
+var advertsData = createMockAdverts(8);
+
 // Функция генерации случ числа от min до max
 function getRandomInRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -81,7 +83,7 @@ var createMockAdverts = function (count) {
   };
 
   var getPhotos = function () {
-    var PHOTOSES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];   
+    var PHOTOSES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']; 
 
     return getArrayRandomLength(PHOTOSES);
   };
@@ -119,15 +121,35 @@ var createMockAdverts = function (count) {
     };
 
     adverts.push(advert);
-  };
-
+  }
 
   return adverts;
 };
 
-console.dir(createMockAdverts(8));
+document.querySelector('.map').classList.remove('map--faded');
+
+var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
+var mapPinsItem = document.querySelector('#pin').content.querySelector('.map__pin');
+
+var createAdvertItem = function (data) {
+  var advertElement = mapPinsItem.cloneNode(true);
+
+  advertElement.style = 'left:' + (data.location.x + 40) + 'px; top:' + (data.location.y + 40) + 'px;';
+  advertElement.querySelector('img').src = data.author.avatar;
+  advertElement.querySelector('img').alt = data.offer.title;
+
+  return advertElement;
+};
 
 // Отображение объявлений на странице
-var renderAdvert = function(data) {
+var renderAdvert = function (data) {
+  var fragment = document.createDocumentFragment();
 
-}
+  for (var i = 0; i < data.length; i++) {
+    fragment.appendChild(createAdvertItem(data[i]));
+  }
+
+  mapPinsElement.appendChild(fragment);
+};
+
+renderAdvert(advertsData);
