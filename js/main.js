@@ -129,13 +129,21 @@ function createMockAdverts(count) {
 document.querySelector('.map').classList.remove('map--faded');
 
 var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
-var mapPinsItem = document.querySelector('#pin').content.querySelector('.map__pin');
+var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin
+var mapPinsItem = mapPinTemplate.content.querySelector('.map__pin');
+
+// Получение ширины/высоты mapPin
+function getSizeMapPin(size) {
+  var valueMapPin = mapPinTemplate.content.querySelector('img')[size];
+
+  return valueMapPin;
+}
 
 // Создание 1 объявления
 var createAdvertItem = function (data) {
   var advertElement = mapPinsItem.cloneNode(true);
 
-  advertElement.style = 'left:' + (data.location.x + 40) + 'px; top:' + (data.location.y + 40) + 'px;';
+  advertElement.style = 'left:' + (data.location.x + getSizeMapPin('width')) + 'px; top:' + (data.location.y + getSizeMapPin('height')) + 'px;';
   advertElement.querySelector('img').src = data.author.avatar;
   advertElement.querySelector('img').alt = data.offer.title;
 
