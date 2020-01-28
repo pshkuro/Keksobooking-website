@@ -13,7 +13,7 @@ function getRandomArrayItem(arr) {
 
 // Функция получения массива случайной длины
 function getArrayRandomLength(arr) {
-  var randomLength = getRandomInRange(0, arr.length);
+  var randomLength = getRandomInRange(1, arr.length);
 
   return arr.slice(0, randomLength);
 }
@@ -82,7 +82,7 @@ function createMockAdverts(count) {
 
   var getPhotos = function () {
     var PHOTOSES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
+    
     return getArrayRandomLength(PHOTOSES);
   };
 
@@ -133,6 +133,7 @@ var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin(ме
 var mapPinsItem = mapPinTemplate.content.querySelector('.map__pin');
 var mapCardTemplate = document.querySelector('#card'); // Шаблон mapCard(карточка объявления)
 var mapCardItem = mapCardTemplate.content.querySelector('.map__card');
+var mapCardElement = document.querySelector('.map'); // Эл, в кот будем вставлять карточку объявления
 
 // Получение ширины/высоты mapPin
 function getSizeMapPin(size) {
@@ -157,15 +158,35 @@ var createCardItem = function (data) {
   var advertElement = mapCardItem.cloneNode(true);
 
   advertElement.querySelector('.popup__title').textContent = data.offer.title;
-  advertElement.querySelector('.popup__text—address').textContent = data.offer.price + '₽/ночь';
+  advertElement.querySelector('.popup__text--address').textContent = data.offer.price + '₽/ночь';
   advertElement.querySelector('.popup__type').textContent = data.offer.type;
-  advertElement.querySelector('.popup__text—capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
-  advertElement.querySelector('.popup__text—time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+  advertElement.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+  advertElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
   advertElement.querySelector('.popup__features').textContent = data.offer.features;
   advertElement.querySelector('.popup__description').textContent = data.offer.description;
-  advertElement.querySelector('.popup__photos').src = data.offer.photos;
+
+  // Отображаем фотографии из массива photos(удаляем пустой шаблон)
+  var popupPhotos = advertElement.querySelector('.popup__photos');
+  var popupPhotosImageTemplate = popupPhotos.querySelector('img');
+  popupPhotosImageTemplate.remove();
+  
+  for (var i = 0; i < data.offer.photos.length; i++) {
+    var popupPhotosImage = popupPhotosImageTemplate.cloneNode(true);
+
+    popupPhotosImage.src = data.offer.photos[i];
+    popupPhotos.appendChild(popupPhotosImage);
+  };
+
+  
   advertElement.querySelector('.popup__avatar').src = data.author.avatar;
+
+  return advertElement;
 };
+
+var cardAdvertElement = createCardItem(advertsData[0]);
+var mapFilterContainerElement = document.querySelector('.map__filters-container');
+
+mapFilterContainerElement.before(cardAdvertElement);
 
 // Отображение объявлений на странице
 var renderAdvert = function (data) {
