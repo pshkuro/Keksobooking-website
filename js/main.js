@@ -27,7 +27,7 @@ function createMockAdverts(count) {
   };
 
   var getTitle = function () {
-    var TITLES = ['Дом', 'Квартира', 'Лофт', 'Участок', 'Пентхаус', 'Помещение', 'Жилье', 'Домик'];
+    var TITLES = ['Для влюбленных', 'Большой дом для семьи', 'Прекрасный лофт', 'Небольшой участок', 'Шикарный пентхаус', 'Помещение для бизнеса', 'Жилье в центре', 'Домик у парка'];
 
     return getRandomArrayItem(TITLES);
   };
@@ -129,8 +129,10 @@ var advertsData = createMockAdverts(8);
 document.querySelector('.map').classList.remove('map--faded');
 
 var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
-var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin
+var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin(метка объявления)
 var mapPinsItem = mapPinTemplate.content.querySelector('.map__pin');
+var mapCardTemplate = document.querySelector('#card'); // Шаблон mapCard(карточка объявления)
+var mapCardItem = mapCardTemplate.content.querySelector('.map__card');
 
 // Получение ширины/высоты mapPin
 function getSizeMapPin(size) {
@@ -139,7 +141,7 @@ function getSizeMapPin(size) {
   return valueMapPin;
 }
 
-// Создание 1 объявления
+// Создание 1 метки объявления
 var createAdvertItem = function (data) {
   var advertElement = mapPinsItem.cloneNode(true);
 
@@ -148,6 +150,21 @@ var createAdvertItem = function (data) {
   advertElement.querySelector('img').alt = data.offer.title;
 
   return advertElement;
+};
+
+// Создание 1 карточки объявления
+var createCardItem = function (data) {
+  var advertElement = mapCardItem.cloneNode(true);
+
+  advertElement.querySelector('.popup__title').textContent = data.offer.title;
+  advertElement.querySelector('.popup__text—address').textContent = data.offer.price + '₽/ночь';
+  advertElement.querySelector('.popup__type').textContent = data.offer.type;
+  advertElement.querySelector('.popup__text—capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+  advertElement.querySelector('.popup__text—time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+  advertElement.querySelector('.popup__features').textContent = data.offer.features;
+  advertElement.querySelector('.popup__description').textContent = data.offer.description;
+  advertElement.querySelector('.popup__photos').src = data.offer.photos;
+  advertElement.querySelector('.popup__avatar').src = data.author.avatar;
 };
 
 // Отображение объявлений на странице
@@ -162,3 +179,5 @@ var renderAdvert = function (data) {
 };
 
 renderAdvert(advertsData);
+
+
