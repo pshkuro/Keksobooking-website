@@ -13,7 +13,7 @@ function getRandomArrayItem(arr) {
 
 // Функция получения массива случайной длины
 function getArrayRandomLength(arr) {
-  var randomLength = getRandomInRange(0, arr.length);
+  var randomLength = getRandomInRange(1, arr.length);
 
   return arr.slice(0, randomLength);
 }
@@ -27,7 +27,7 @@ function createMockAdverts(count) {
   };
 
   var getTitle = function () {
-    var TITLES = ['Дом', 'Квартира', 'Лофт', 'Участок', 'Пентхаус', 'Помещение', 'Жилье', 'Домик'];
+    var TITLES = ['Для влюбленных', 'Большой дом для семьи', 'Прекрасный лофт', 'Небольшой участок', 'Шикарный пентхаус', 'Помещение для бизнеса', 'Жилье в центре', 'Домик у парка'];
 
     return getRandomArrayItem(TITLES);
   };
@@ -37,7 +37,7 @@ function createMockAdverts(count) {
   };
 
   var getPrice = function () {
-    var PRICES = [500, 1000, 20, 50, 100, 990, 555, 60];
+    var PRICES = [1700, 1000, 20000, 5000, 1090, 990, 55500, 600];
 
     return getRandomArrayItem(PRICES);
   };
@@ -75,7 +75,7 @@ function createMockAdverts(count) {
   };
 
   var getDescription = function () {
-    var DESCRIPTIONS = ['пип', 'пап', 'гав', 'кек'];
+    var DESCRIPTIONS = ['Снимайте скорее', 'Вам очень понравится', 'Супер место для отдыха'];
 
     return getRandomArrayItem(DESCRIPTIONS);
   };
@@ -118,6 +118,7 @@ function createMockAdverts(count) {
       }
     };
 
+
     adverts.push(advert);
   }
 
@@ -129,8 +130,10 @@ var advertsData = createMockAdverts(8);
 document.querySelector('.map').classList.remove('map--faded');
 
 var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
-var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin
+var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin(метка объявления)
 var mapPinsItem = mapPinTemplate.content.querySelector('.map__pin');
+var mapCardTemplate = document.querySelector('#card'); // Шаблон mapCard(карточка объявления)
+var mapCardItem = mapCardTemplate.content.querySelector('.map__card');
 
 // Получение ширины/высоты mapPin
 function getSizeMapPin(size) {
@@ -139,7 +142,7 @@ function getSizeMapPin(size) {
   return valueMapPin;
 }
 
-// Создание 1 объявления
+// Создание 1 метки объявления
 var createAdvertItem = function (data) {
   var advertElement = mapPinsItem.cloneNode(true);
 
@@ -162,3 +165,120 @@ var renderAdvert = function (data) {
 };
 
 renderAdvert(advertsData);
+
+// Функция перевода типа жилья на RU
+var getPropertyType = function (type) {
+  var propertyTypes = {
+    'palace': 'Дворец',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'bungalo': 'Бунгало'
+  };
+
+  return propertyTypes[type];
+};
+
+// Создание 1 карточки объявления
+var createCardItem = function (data) {
+  var advertElement = mapCardItem.cloneNode(true);
+
+  // Функция проверки блока на существование данных и их добавление
+  // element - путь к элементу (advertElement.querySelector('.popup__title')), info - путь к данным массива, render _функц с данными в зав от их типа
+  function createDataCardItem(element, info, render) {
+    if (info) {
+      render();
+    } else {
+      element.style.display = 'none';
+    }
+  }
+
+  var title = data.offer.title;
+  var popupTitleElement = advertElement.querySelector('.popup__title');
+  var titleRender = function () {
+    popupTitleElement.textContent = title;
+  };
+  createDataCardItem(popupTitleElement, title, titleRender);
+
+  var address = data.offer.address;
+  var popupAddressElement = advertElement.querySelector('.popup__text--address');
+  var addressRender = function () {
+    popupAddressElement.textContent = address;
+  };
+  createDataCardItem(popupAddressElement, address, addressRender);
+
+  var price = data.offer.price;
+  var popupPriceElement = advertElement.querySelector('.popup__text--price');
+  var priceRender = function () {
+    popupPriceElement.textContent = price + '₽/ночь';
+  };
+  createDataCardItem(popupPriceElement, price, priceRender);
+
+  var capacity = data.offer.rooms;
+  var popupCapacityElement = advertElement.querySelector('.popup__text--capacity');
+  var capacityRender = function () {
+    popupCapacityElement.textContent = capacity + ' комнаты для ' + data.offer.guests + ' гостей';
+  };
+  createDataCardItem(popupCapacityElement, capacity, capacityRender);
+
+  var time = data.offer.checkin;
+  var popupTimeElement = advertElement.querySelector('.popup__text--time');
+  var timeRender = function () {
+    popupTimeElement.textContent = 'Заезд после ' + time + ', выезд до ' + data.offer.checkout;
+  };
+  createDataCardItem(popupTimeElement, time, timeRender);
+
+  var features = data.offer.features;
+  var popupFeaturesElement = advertElement.querySelector('.popup__features');
+  var featuresRender = function () {
+    popupFeaturesElement.textContent = features;
+  };
+  createDataCardItem(popupFeaturesElement, features, featuresRender);
+
+  var description = data.offer.description;
+  var popupDescriptionElement = advertElement.querySelector('.popup__description');
+  var descriptionRender = function () {
+    popupDescriptionElement.textContent = description;
+  };
+  createDataCardItem(popupDescriptionElement, description, descriptionRender);
+
+  var avatar = data.author.avatar;
+  var popupAvatarElement = advertElement.querySelector('.popup__avatar');
+  var avatarRender = function () {
+    popupAvatarElement.src = avatar;
+  };
+  createDataCardItem(popupAvatarElement, avatar, avatarRender);
+
+  // Отображение переведенного на RU типа жилья в карточке
+  var type = data.offer.type;
+  var propertyType = getPropertyType(type);
+  var popupTypeElement = advertElement.querySelector('.popup__type');
+  var typeRender = function () {
+    popupTypeElement.textContent = propertyType;
+  };
+  createDataCardItem(popupTypeElement, propertyType, typeRender);
+
+  // Отображаем фотографии из массива photos(удаляем пустой шаблон)
+  var photos = data.offer.photos;
+  var popupPhotos = advertElement.querySelector('.popup__photos');
+  var popupPhotosImageTemplate = popupPhotos.querySelector('img');
+  popupPhotosImageTemplate.remove();
+
+  var photosRender = function () {
+    for (var i = 0; i < data.offer.photos.length; i++) {
+      var popupPhotosImage = popupPhotosImageTemplate.cloneNode(true);
+      popupPhotosImage.src = data.offer.photos[i];
+      popupPhotos.appendChild(popupPhotosImage);
+    }
+  };
+  createDataCardItem(popupPhotos, photos, photosRender);
+
+  return advertElement;
+};
+
+
+// Создаем DOM-элемент(карточку объявления) на основе 1 эл массива данных, вставляем его в нужный блок
+var cardAdvertElement = createCardItem(advertsData[0]);
+var mapFilterContainerElement = document.querySelector('.map__filters-container');
+
+mapFilterContainerElement.before(cardAdvertElement);
+
