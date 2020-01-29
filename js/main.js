@@ -256,7 +256,6 @@ var createCardItem = function (data) {
     popupTypeElement.textContent = propertyType;
   };
   createDataCardItem(popupTypeElement, propertyType, typeRender);
-  // advertElement.querySelector('.popup__type').textContent = propertyType;
 
   // Отображаем фотографии из массива photos(удаляем пустой шаблон)
   var photos = data.offer.photos;
@@ -271,7 +270,6 @@ var createCardItem = function (data) {
       popupPhotos.appendChild(popupPhotosImage);
     }
   };
-
   createDataCardItem(popupPhotos, photos, photosRender);
 
   return advertElement;
