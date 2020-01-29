@@ -37,7 +37,7 @@ function createMockAdverts(count) {
   };
 
   var getPrice = function () {
-    var PRICES = [500, 1000, 20, 50, 100, 990, 555, 60];
+    var PRICES = [1700, 1000, 20000, 5000, 1090, 990, 55500, 600];
 
     return getRandomArrayItem(PRICES);
   };
@@ -118,6 +118,7 @@ function createMockAdverts(count) {
       }
     };
 
+
     adverts.push(advert);
   }
 
@@ -159,7 +160,7 @@ var renderAdvert = function (data) {
   for (var i = 0; i < data.length; i++) {
     fragment.appendChild(createAdvertItem(data[i]));
   }
-  
+
   mapPinsElement.appendChild(fragment);
 };
 
@@ -206,8 +207,19 @@ var createCardItem = function (data) {
     popupPhotos.appendChild(popupPhotosImage);
   }
 
+  // У нас есть карточка эелемента (<article class="map__card popup">), нужно проверить, пусты ли дети этого Dom
+  // элемента, если да, убираем его с помощью метода el.hidden = true;
+  var advertDataElement = advertElement.children;
+  console.dir(advertDataElement);
+  for (var i = 0; i < advertDataElement.lenght; i++) {
+    if (advertDataElement[i].textContent = '') {
+      advertDataElement[i].hidden = true;
+    }
+  }
+
   return advertElement;
 };
+
 
 // Создаем DOM-элемент(карточку объявления) на основе 1 эл массива данных, вставляем его в нужный блок
 var cardAdvertElement = createCardItem(advertsData[0]);
