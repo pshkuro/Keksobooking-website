@@ -132,8 +132,8 @@ var advertsData = createMockAdverts(8);
 var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
 var mapPinTemplate = document.querySelector('#pin'); // Шаблон mapPin(метка объявления)
 var mapPinsItem = mapPinTemplate.content.querySelector('.map__pin');
-var mapCardTemplate = document.querySelector('#card'); // Шаблон mapCard(карточка объявления)
-var mapCardItem = mapCardTemplate.content.querySelector('.map__card');
+// var mapCardTemplate = document.querySelector('#card'); // Шаблон mapCard(карточка объявления)
+// var mapCardItem = mapCardTemplate.content.querySelector('.map__card');
 
 // Получение ширины/высоты mapPin
 function getSizeMapPin(size) {
@@ -281,40 +281,59 @@ var renderAdvert = function (data) {
 
 // mapFilterContainerElement.before(cardAdvertElement);
 
-// Неактивное сотояние страницы
+// Состояние страницы
 var dataForm = document.querySelector('.ad-form');
-var dataFormFields = dataForm.querySelectorAll('fieldset');
 var filtersForm = document.querySelector('.map__filters');
-var filtersFormFields = filtersForm.querySelectorAll('select');
+var addressField = dataForm.querySelector('#address');
+var mapPinMainWidth = 65;
+var mapPinMainHeight = 65;
+var mapMain = document.querySelector('.map');
+var mapPinMain = document.querySelector('.map__pin--main');
+var mapPinMainTipHeight = 22;
 
+// Неактивное состояние страницы
 // Блокируем все поля формы
-function disableFormFields(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    arr[i].setAttribute('disabled', 'disabled');
+function setDisabledFormFields(form, disabled) {
+  var formChildren = form.children;
+  for (var i = 0; i < formChildren.length; i++) {
+    formChildren[i].disabled = disabled;
   }
 }
 
-disableFormFields(dataFormFields);
-disableFormFields(filtersFormFields);
+setDisabledFormFields(dataForm, true);
+setDisabledFormFields(filtersForm, true);
+
+// Вставляем адрес формы поля Адрес в соотв координатами центра метки
+// Координаты центра метки по X и по Y
+function getPinCenterLocation(location, size) {
+  var pinLocation = (parseInt(location, 10) + size / 2);
+  return Math.round(pinLocation);
+}
+
+function setAddress(locationX, locationY, heightTip) {
+  if (heightTip) {
+    addressField.value = locationX + ' ,' + (locationY + heightTip);
+  } else {
+    addressField.value = locationX + ' ,' + locationY;
+  }
+}
+
+var mapPinCentralLocationX = getPinCenterLocation(mapPinMain.style.left, mapPinMainWidth);
+var mapPinCentralLocationY = getPinCenterLocation(mapPinMain.style.top, mapPinMainHeight);
+
+setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
 
 // Активное состояние страницы
-var mapPinMain = document.querySelector('.map__pin--main');
-var mapMain = document.querySelector('.map');
-
-// Разблокировка полей формы
-function removeDisableFormFields(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    arr[i].removeAttribute('disabled');
-  }
-}
-
 // Функция активации страницы
 var makePageActive = function () {
   mapMain.classList.remove('map--faded');
-  removeDisableFormFields(dataFormFields);
-  removeDisableFormFields(filtersFormFields);
+  setDisabledFormFields(filtersForm, false);
+  setDisabledFormFields(dataForm, false);
+  dataForm.classList.remove('ad-form--disabled');
   renderAdvert(advertsData); // функция отрисовки меток на карте
+  setAddress(mapPinCentralLocationX, mapPinCentralLocationY, mapPinMainTipHeight); // функция опред адреса в соотв с перемещаемой меткой
 };
+
 
 mapPinMain.addEventListener('mousedown', function (evt) {
   if (evt.which === 1) {
@@ -328,3 +347,47 @@ mapPinMain.addEventListener('keydown', function (evt) {
   }
 });
 
+// Валидация
+function validateRoomNumbersAndCapacity() {
+  var roomNumbersSelect = dataForm.elements['room_number'];
+  var capacitySelect = dataForm.elements['capacity'];
+
+  var roomNumbers = roomNumbersSelect.value;
+  var capacity = capacitySelect.value;
+
+  var requirementMapping = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0']
+  };
+
+  var requirements = requirementMapping[roomNumbers];
+  var isValid = false;
+
+  for (var i = 0; i < requirements.length; i++) {
+    var requirement = requirements[i];
+    if (requirement === capacity) {
+      isValid = true;
+      break;
+    } else {
+      isValid = false;
+    }
+  }
+
+  if (isValid) {
+    roomNumbersSelect.setCustomValidity('');
+  } else {
+    roomNumbersSelect.setCustomValidity('Количество комнат не соотвествует количеству гостей');
+  }
+}
+
+validateRoomNumbersAndCapacity();
+
+dataForm.elements['room_number'].addEventListener('change', function () {
+  validateRoomNumbersAndCapacity();
+});
+
+dataForm.elements['capacity'].addEventListener('change', function () {
+  validateRoomNumbersAndCapacity();
+});
