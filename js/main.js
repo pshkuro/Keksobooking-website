@@ -282,14 +282,15 @@ var renderAdvert = function (data) {
 // mapFilterContainerElement.before(cardAdvertElement);
 
 // Состояние страницы
+var MAP_PIN_MAIN_WIDTH = 65;
+var MAP_PIN_MAIN_HEIGHT = 65;
+var MAP_PIN_MAIN_TIP_HEIGHT = 22;
+
 var dataForm = document.querySelector('.ad-form');
 var filtersForm = document.querySelector('.map__filters');
 var addressField = dataForm.querySelector('#address');
-var mapPinMainWidth = 65;
-var mapPinMainHeight = 65;
 var mapMain = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
-var mapPinMainTipHeight = 22;
 
 // Неактивное состояние страницы
 // Блокируем все поля формы
@@ -318,8 +319,8 @@ function setAddress(locationX, locationY, heightTip) {
   }
 }
 
-var mapPinCentralLocationX = getPinCenterLocation(mapPinMain.style.left, mapPinMainWidth);
-var mapPinCentralLocationY = getPinCenterLocation(mapPinMain.style.top, mapPinMainHeight);
+var mapPinCentralLocationX = getPinCenterLocation(mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
+var mapPinCentralLocationY = getPinCenterLocation(mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
 
 setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
 
@@ -331,7 +332,7 @@ var makePageActive = function () {
   setDisabledFormFields(dataForm, false);
   dataForm.classList.remove('ad-form--disabled');
   renderAdvert(advertsData); // функция отрисовки меток на карте
-  setAddress(mapPinCentralLocationX, mapPinCentralLocationY, mapPinMainTipHeight); // функция опред адреса в соотв с перемещаемой меткой
+  setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
 };
 
 
