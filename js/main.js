@@ -143,13 +143,13 @@ function getSizeMapPin(size) {
 }
 
 // Создание 1 метки объявления
-var createAdvertItem = function (data) {
+var createAdvertItem = function (data, id) {
   var advertElement = mapPinsItem.cloneNode(true);
 
   advertElement.style = 'left:' + (data.location.x + getSizeMapPin('width')) + 'px; top:' + (data.location.y + getSizeMapPin('height')) + 'px;';
   advertElement.querySelector('img').src = data.author.avatar;
   advertElement.querySelector('img').alt = data.offer.title;
-
+  advertElement.dataset.id = id;
   return advertElement;
 };
 
@@ -158,7 +158,7 @@ var renderAdvert = function (data) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < data.length; i++) {
-    fragment.appendChild(createAdvertItem(data[i]));
+    fragment.appendChild(createAdvertItem(data[i], i));
   }
 
   mapPinsElement.appendChild(fragment);
@@ -274,12 +274,6 @@ var createCardItem = function (data) {
   return advertElement;
 };
 
-
-// Создаем DOM-элемент(карточку объявления) на основе 1 эл массива данных, вставляем его в нужный блок
-var cardAdvertElement = createCardItem(advertsData[1]);
-var mapFilterContainerElement = document.querySelector('.map__filters-container');
-
-mapFilterContainerElement.before(cardAdvertElement);
 
 // Состояние страницы
 var MAP_PIN_MAIN_WIDTH = 65;
@@ -432,19 +426,54 @@ function setTimeinAndTimeout() {
   var timeinSelect = dataForm.elements['timein'];
   var timeoutSelect = dataForm.elements['timeout'];
 
-  var timein = timeinSelect.value;
-  timeoutSelect.value = timein;
-  var timeout = timeoutSelect.value;
-  timeinSelect.value = timeout;
+  dataForm.elements['timein'].addEventListener('change', function () {
+    var timein = timeinSelect.value;
+    timeoutSelect.value = timein;
+  });
 
+  dataForm.elements['timeout'].addEventListener('change', function () {
+    var timeout = timeoutSelect.value;
+    timeinSelect.value = timeout;
+  });
 }
 
 setTimeinAndTimeout();
 
-dataForm.elements['timein'].addEventListener('change', function () {
-  setTimeinAndTimeout();
+
+// Отображаем карточку объявления при клике на соотвсетвующую метку
+var mapPins = document.querySelector('.map__pins');
+var mapFilterContainerElement = document.querySelector('.map__filters-container');
+var prevCardItem = null;
+
+mapPins.addEventListener('click', function (evt) {
+  var clickElement = evt.target;
+  // Получаем значение по клику. Если null то клик произошел не на кнопку(мы ищем ее по селектору)
+  var mapPin = clickElement.closest('.map__pin:not(.map__pin--main)');
+
+  if (mapPin) {
+    var mapId = mapPin.dataset.id;
+    var mapPinData = advertsData[mapId];
+    var cardItem = createCardItem(mapPinData);
+    var cardItemCloseButton = cardItem.querySelector('.popup__close');
+
+    if (prevCardItem) {
+      prevCardItem.remove();
+    }
+
+    mapFilterContainerElement.before(cardItem); // Отрисовка карточи объвления
+    prevCardItem = cardItem;
+
+    cardItemCloseButton.addEventListener('click', function () {
+      cardItem.remove();
+    });
+
+    document.addEventListener('keydown', function closeOnEscape(evtData) {
+      if (evtData.key === 'Escape') {
+        cardItem.remove();
+        document.removeEventListener('keydown', closeOnEscape);
+      }
+    });
+  }
 });
 
-dataForm.elements['timeout'].addEventListener('change', function () {
-  setTimeinAndTimeout();
-});
+
