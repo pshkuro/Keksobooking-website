@@ -14,6 +14,7 @@
   var mapMain = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main');
 
+
   // Неактивное состояние страницы
   window.setDisabledFormFields(window.dataForm, true);
   window.setDisabledFormFields(filtersForm, true);
