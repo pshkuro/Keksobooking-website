@@ -53,4 +53,21 @@
       });
     }
   });
+
+  var dragStartHandle = function () {
+    window.updateFormAddress();
+  };
+  var dragMoveHandle = function () {
+    window.updateFormAddress();
+  };
+  var dragEndHandle = function () {
+    window.updateFormAddress();
+  };
+
+  window.translateElement(window.mapPinMain, {
+    onDragStart: dragStartHandle,
+    onDragMove: dragMoveHandle,
+    onDragEnd: dragEndHandle
+  });
+
 })();

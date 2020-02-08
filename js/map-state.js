@@ -12,7 +12,7 @@
   var filtersForm = document.querySelector('.map__filters');
   var addressField = window.dataForm.querySelector('#address');
   var mapMain = document.querySelector('.map');
-  var mapPinMain = document.querySelector('.map__pin--main');
+  window.mapPinMain = document.querySelector('.map__pin--main');
 
 
   // Неактивное состояние страницы
@@ -34,8 +34,8 @@
     }
   }
 
-  var mapPinCentralLocationX = getPinCenterLocation(mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
-  var mapPinCentralLocationY = getPinCenterLocation(mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
+  var mapPinCentralLocationX = getPinCenterLocation(window.mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
+  var mapPinCentralLocationY = getPinCenterLocation(window.mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
 
   setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
 
@@ -50,16 +50,26 @@
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
   };
 
+  // Обновляем значение поля адрес, когда pin в джвижении
+  function updateFormAddress() {
+    var mapPinLocationX = getPinCenterLocation(window.mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
+    var mapPinLocationY = getPinCenterLocation(window.mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
 
-  mapPinMain.addEventListener('mousedown', function (evt) {
+    setAddress(mapPinLocationX, mapPinLocationY, MAP_PIN_MAIN_TIP_HEIGHT);
+  }
+
+
+  window.mapPinMain.addEventListener('mousedown', function (evt) {
     if (evt.which === 1) {
       makePageActive();
     }
   });
 
-  mapPinMain.addEventListener('keydown', function (evt) {
+  window.mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.key === ENTER) {
       makePageActive();
     }
   });
+
+  window.updateFormAddress = updateFormAddress;
 })();
