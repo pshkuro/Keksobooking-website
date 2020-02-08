@@ -50,10 +50,15 @@
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
   };
 
+  function getPinLocation(location, size) {
+    var pinLocation = (parseInt(location, 10) + size);
+    return Math.round(pinLocation);
+  }
+
   // Обновляем значение поля адрес, когда pin в джвижении
   function updateFormAddress() {
-    var mapPinLocationX = getPinCenterLocation(window.mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
-    var mapPinLocationY = getPinCenterLocation(window.mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
+    var mapPinLocationX = getPinLocation(window.mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
+    var mapPinLocationY = getPinLocation(window.mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
 
     setAddress(mapPinLocationX, mapPinLocationY, MAP_PIN_MAIN_TIP_HEIGHT);
   }
@@ -72,4 +77,5 @@
   });
 
   window.updateFormAddress = updateFormAddress;
+  window.MAP_PIN_HEIGHT = MAP_PIN_MAIN_HEIGHT + MAP_PIN_MAIN_TIP_HEIGHT;
 })();
