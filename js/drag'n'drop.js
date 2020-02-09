@@ -2,7 +2,7 @@
 
 (function () {
 
-  window.translateElement = function (element, callbacks) {
+  window.translateElement = function (element, callbacks, limits) {
     element.addEventListener('mousedown', function onMouseDown(evt) {
       evt.preventDefault();
 
@@ -34,16 +34,18 @@
         var top = element.offsetTop - shift.y;
         var left = element.offsetLeft - shift.x;
 
-        if (top < 130 - window.MAP_PIN_HEIGHT) {
-          element.style.top = 130 - window.MAP_PIN_HEIGHT;
-        } else if (top > 630 - window.MAP_PIN_HEIGHT) {
-          element.style.top = 630 - window.MAP_PIN_HEIGHT;
-        } else {
-          element.style.top = top + 'px';
+        if (limits) {
+          if (top < limits.top - limits.pinHeight) {
+            element.style.top = limits.top - limits.pinHeight;
+          } else if (top > limits.floor - limits.pinHeight) {
+            element.style.top = limits.floor - limits.pinHeight;
+          } else {
+            element.style.top = top + 'px';
+          }
+
+          element.style.left = left + 'px';
+          callbacks.onDragMove(top, left);
         }
-        
-        element.style.left = left + 'px';
-        callbacks.onDragMove(top, left);
       };
 
       var onMouseUp = function (upEvt) {

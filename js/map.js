@@ -68,6 +68,11 @@
     onDragStart: dragStartHandle,
     onDragMove: dragMoveHandle,
     onDragEnd: dragEndHandle
+  },
+  {
+    top: 130,
+    floor: 630,
+    pinHeight: window.MAP_PIN_HEIGHT
   });
 
 })();
