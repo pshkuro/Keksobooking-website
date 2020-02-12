@@ -30,13 +30,14 @@
 
     if (mapPin) {
       var mapId = mapPin.dataset.id;
-      var mapPinData = window.advertsData[mapId];
+      var mapPinData = window.adverts[mapId]; // Передаю в качестве данных - данные с сервера
       var cardItem = window.createCardItem(mapPinData);
       var cardItemCloseButton = cardItem.querySelector('.popup__close');
 
       if (prevCardItem) {
         prevCardItem.remove();
       }
+
 
       mapFilterContainerElement.before(cardItem); // Отрисовка карточи объвления
       prevCardItem = cardItem;
@@ -54,6 +55,7 @@
     }
   });
 
+  // Перемещение mapMainPin по карте -> заполнение поля address
   var dragStartHandle = function () {
     window.updateFormAddress();
   };

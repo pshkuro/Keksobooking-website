@@ -39,6 +39,19 @@
 
   setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
 
+  // Обработчик ошибок
+  window.errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
   // Активное состояние страницы
   // Функция активации страницы
   var makePageActive = function () {
@@ -46,8 +59,13 @@
     window.setDisabledFormFields(filtersForm, false);
     window.setDisabledFormFields(window.dataForm, false);
     window.dataForm.classList.remove('ad-form--disabled');
-    window.renderAdvert(window.advertsData); // функция отрисовки меток на карте
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
+    // Получила данные с сервера и отобразила. В качестве параметоров (onLoad - анонимная функция, onError).
+    window.getAdverts(
+        function (data) {
+          window.renderAdvert(data);
+          window.adverts = data;
+        }, window.errorHandler);
   };
 
   function getPinLocation(location, size) {
