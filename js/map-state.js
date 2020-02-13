@@ -8,6 +8,7 @@
   var MAP_PIN_MAIN_TIP_HEIGHT = 22;
   var ENTER = 'Enter';
 
+  var isDisabled = true; // Проверка в каком состоянии находится страинца
   window.dataForm = document.querySelector('.ad-form');
   var filtersForm = document.querySelector('.map__filters');
   var addressField = window.dataForm.querySelector('#address');
@@ -55,6 +56,7 @@
   // Активное состояние страницы
   // Функция активации страницы
   var makePageActive = function () {
+    isDisabled = false;
     mapMain.classList.remove('map--faded');
     window.setDisabledFormFields(filtersForm, false);
     window.setDisabledFormFields(window.dataForm, false);
@@ -67,6 +69,7 @@
           window.adverts = data;
         }, window.errorHandler);
   };
+
 
   function getPinLocation(location, size) {
     var pinLocation = (parseInt(location, 10) + size);
@@ -83,13 +86,13 @@
 
 
   window.mapPinMain.addEventListener('mousedown', function (evt) {
-    if (evt.which === 1) {
+    if (evt.which === 1 && isDisabled === true) {
       makePageActive();
     }
   });
 
   window.mapPinMain.addEventListener('keydown', function (evt) {
-    if (evt.key === ENTER) {
+    if (evt.key === ENTER && isDisabled === true) {
       makePageActive();
     }
   });
