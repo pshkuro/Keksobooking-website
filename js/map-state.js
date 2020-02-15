@@ -106,7 +106,7 @@
   var successMessage = successMessageTemplate.content.querySelector('.success');
   var errorMessageTemplate = document.querySelector('#error');
   var errorMessage = errorMessageTemplate.content.querySelector('.error');
-  var errorMessageButton = errorMessageTemplate.querySelector('error__button');
+  var errorMessageButton = errorMessageTemplate.content.querySelector('.error__button');
 
   // Сообщение о успешной загрузке данных
   function createSuccessMessage() {
