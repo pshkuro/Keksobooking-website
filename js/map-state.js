@@ -16,10 +16,6 @@
   window.mapPinMain = document.querySelector('.map__pin--main');
 
 
-  // Неактивное состояние страницы
-  window.setDisabledFormFields(window.dataForm, true);
-  window.setDisabledFormFields(filtersForm, true);
-
   // Вставляем адрес формы поля Адрес в соотв координатами центра метки
   // Координаты центра метки по X и по Y
   function getPinCenterLocation(location, size) {
@@ -38,7 +34,17 @@
   var mapPinCentralLocationX = getPinCenterLocation(window.mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
   var mapPinCentralLocationY = getPinCenterLocation(window.mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
 
-  setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
+
+  // Функция блокировки страницы
+  function makePageDisabled() {
+
+    // Неактивное состояние страницы
+    window.setDisabledFormFields(window.dataForm, true);
+    window.setDisabledFormFields(filtersForm, true);
+
+    setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
+  }
+  makePageDisabled();
 
   // Обработчик ошибок
   window.errorHandler = function (errorMessage) {
@@ -69,6 +75,15 @@
           window.adverts = data;
         }, window.errorHandler);
   };
+
+  // Отправка данных формы на сервер
+  window.dataForm.addEventListener('submit', function (evt) {
+    window.sendData(new FormData(window.dataForm), function () {
+      window.dataForm.reset();
+      makePageDisabled();
+    }, window.errorHandler);
+    evt.preventDefault();
+  });
 
 
   function getPinLocation(location, size) {
