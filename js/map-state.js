@@ -9,12 +9,15 @@
   var ENTER = 'Enter';
 
   var isDisabled = true; // Проверка в каком состоянии находится страинца
+  var errorMessageTemplate = document.querySelector('#error');
+  var errorMessage = errorMessageTemplate.content.querySelector('.error');
+  var successMessageTemplate = document.querySelector('#success');
+  var successMessage = successMessageTemplate.content.querySelector('.success');
   window.dataForm = document.querySelector('.ad-form');
   var filtersForm = document.querySelector('.map__filters');
   var addressField = window.dataForm.querySelector('#address');
   var mapMain = document.querySelector('.map');
   window.mapPinMain = document.querySelector('.map__pin--main');
-
 
   // Вставляем адрес формы поля Адрес в соотв координатами центра метки
   // Координаты центра метки по X и по Y
@@ -34,20 +37,18 @@
   var mapPinCentralLocationX = getPinCenterLocation(window.mapPinMain.style.left, MAP_PIN_MAIN_WIDTH);
   var mapPinCentralLocationY = getPinCenterLocation(window.mapPinMain.style.top, MAP_PIN_MAIN_HEIGHT);
 
-
-  // Функция блокировки страницы
-  function makePageDisabled() {
-
-    // Неактивное состояние страницы
+  function startPageState() {
+    isDisabled = true;
     window.setDisabledFormFields(window.dataForm, true);
     window.setDisabledFormFields(filtersForm, true);
-
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
   }
-  makePageDisabled();
+
+  startPageState();
+
 
   // Обработчик ошибок
-  window.errorHandler = function (errorMessage) {
+  window.errorHandler = function () {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -55,9 +56,18 @@
     node.style.right = 0;
     node.style.fontSize = '30px';
 
-    node.textContent = errorMessage;
+    // node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
+
+  var initialTop = window.mapPinMain.style.top;
+  var initialLeft = window.mapPinMain.style.left;
+
+  // Сброс положения mapPinMain при disabled
+  function restoreMapPinMainPosition() {
+    window.mapPinMain.style.top = initialTop;
+    window.mapPinMain.style.left = initialLeft;
+  }
 
   // Активное состояние страницы
   // Функция активации страницы
@@ -76,11 +86,27 @@
         }, window.errorHandler);
   };
 
+  // Функция блокировки страницы
+  function makePageDisabled() {
+    var mapPins = mapMain.querySelectorAll('.map__pin');
+    var mapCard = document.querySelector('.map__card');
+    mapPins.forEach(function (i) {
+      if (i !== window.mapPinMain) {
+        i.remove();
+      }
+    });
+    mapCard.remove();
+    mapMain.classList.add('map--faded');
+    window.dataForm.classList.add('ad-form--disabled');
+    startPageState();
+    restoreMapPinMainPosition();
+  }
+
   // Отправка данных формы на сервер
   window.dataForm.addEventListener('submit', function (evt) {
     window.sendData(new FormData(window.dataForm), function () {
-      window.dataForm.reset();
-      makePageDisabled();
+      window.dataForm.reset(); // Сбрасываем форму
+      makePageDisabled(); // Возвращаем страницу в disabled состояние
     }, window.errorHandler);
     evt.preventDefault();
   });

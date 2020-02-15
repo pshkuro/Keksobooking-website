@@ -19,11 +19,10 @@
   };
 
   // Отображаем карточку объявления при клике на соотвсетвующую метку
-  var mapPins = document.querySelector('.map__pins');
   var mapFilterContainerElement = document.querySelector('.map__filters-container');
   var prevCardItem = null;
 
-  mapPins.addEventListener('click', function (evt) {
+  mapPinsElement.addEventListener('click', function (evt) {
     var clickElement = evt.target;
     // Получаем значение по клику. Если null то клик произошел не на кнопку(мы ищем ее по селектору)
     var mapPin = clickElement.closest('.map__pin:not(.map__pin--main)');
