@@ -7,12 +7,9 @@
   var MAP_PIN_MAIN_HEIGHT = 65;
   var MAP_PIN_MAIN_TIP_HEIGHT = 22;
   var ENTER = 'Enter';
+  var ESC = 'Escape';
 
   var isDisabled = true; // Проверка в каком состоянии находится страинца
-  var errorMessageTemplate = document.querySelector('#error');
-  var errorMessage = errorMessageTemplate.content.querySelector('.error');
-  var successMessageTemplate = document.querySelector('#success');
-  var successMessage = successMessageTemplate.content.querySelector('.success');
   window.dataForm = document.querySelector('.ad-form');
   var filtersForm = document.querySelector('.map__filters');
   var addressField = window.dataForm.querySelector('#address');
@@ -95,11 +92,67 @@
         i.remove();
       }
     });
-    mapCard.remove();
+    if (mapCard) {
+      mapCard.remove();
+    }
     mapMain.classList.add('map--faded');
     window.dataForm.classList.add('ad-form--disabled');
     startPageState();
     restoreMapPinMainPosition();
+  }
+
+  var mainPage = document.querySelector('main');
+  var successMessageTemplate = document.querySelector('#success');
+  var successMessage = successMessageTemplate.content.querySelector('.success');
+  var errorMessageTemplate = document.querySelector('#error');
+  var errorMessage = errorMessageTemplate.content.querySelector('.error');
+  var errorMessageButton = errorMessageTemplate.querySelector('error__button');
+
+  // Сообщение о успешной загрузке данных
+  function createSuccessMessage() {
+    var successMessageElement = successMessage.cloneNode(true);
+
+    mainPage.appendChild(successMessageElement);
+
+    document.addEventListener('keydown', function removeListener(evt) {
+      if (evt.key === ESC) {
+        successMessageElement.remove();
+      }
+
+      document.removeEventListener('keydown', removeListener);
+    });
+
+
+    document.addEventListener('click', function removeListener() {
+      successMessageElement.remove();
+      document.removeEventListener('click', removeListener);
+    });
+  }
+
+  // Сообщение об ошибке
+  function createErrorMessage() {
+    var errorMessageElement = errorMessage.cloneNode(true);
+
+    mainPage.appendChild(errorMessageElement);
+
+    document.addEventListener('keydown', function removeListener(evt) {
+      if (evt.key === ESC) {
+        errorMessageElement.remove();
+      }
+
+      document.removeEventListener('keydown', removeListener);
+    });
+
+    document.addEventListener('click', function removeListener() {
+      errorMessageElement.remove();
+      document.removeEventListener('click', removeListener);
+    });
+
+    errorMessageButton.addEventListener('click', function removeListener(evt) {
+      evt.preventDefault();
+      errorMessageElement.remove();
+      document.removeEventListener('click', removeListener);
+    });
   }
 
   // Отправка данных формы на сервер
@@ -107,7 +160,8 @@
     window.sendData(new FormData(window.dataForm), function () {
       window.dataForm.reset(); // Сбрасываем форму
       makePageDisabled(); // Возвращаем страницу в disabled состояние
-    }, window.errorHandler);
+      createSuccessMessage();
+    }, createErrorMessage);
     evt.preventDefault();
   });
 
