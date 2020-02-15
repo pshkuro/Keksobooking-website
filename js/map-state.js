@@ -87,9 +87,9 @@
   function makePageDisabled() {
     var mapPins = mapMain.querySelectorAll('.map__pin');
     var mapCard = document.querySelector('.map__card');
-    mapPins.forEach(function (i) {
-      if (i !== window.mapPinMain) {
-        i.remove();
+    mapPins.forEach(function (pinItem) {
+      if (pinItem !== window.mapPinMain) {
+        pinItem.remove();
       }
     });
     if (mapCard) {
