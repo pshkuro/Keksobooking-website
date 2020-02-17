@@ -8,11 +8,11 @@
   var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
 
   // Отображение меток объявлений на странице
-  window.renderAdvert = function (data) {
+  window.renderAdvert = function (data, k) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < data.length; i++) {
-      fragment.appendChild(window.createAdvertItem(data[i], i));
+    for (var i = 0; i < data.length && i < k; i++) {
+      fragment.appendChild(window.createAdvertItem(data[i]));
     }
 
     mapPinsElement.appendChild(fragment);
