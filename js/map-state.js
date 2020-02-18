@@ -45,7 +45,7 @@
 
 
   // Обработчик ошибок
-  window.errorHandler = function () {
+  window.errorHandler = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -53,7 +53,7 @@
     node.style.right = 0;
     node.style.fontSize = '30px';
 
-    // node.textContent = errorMessage;
+    node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
@@ -71,15 +71,19 @@
   var makePageActive = function () {
     isDisabled = false;
     mapMain.classList.remove('map--faded');
-    window.setDisabledFormFields(filtersForm, false);
     window.setDisabledFormFields(window.dataForm, false);
     window.dataForm.classList.remove('ad-form--disabled');
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
     // Получила данные с сервера и отобразила. В качестве параметоров (onLoad - анонимная функция, onError).
     window.getAdverts(
         function (data) {
-          window.renderAdvert(data);
-          window.adverts = data;
+          window.adverts = data.map(function (item, index) {
+            item.id = index;
+            return item;
+          });
+
+          window.renderAdvert(window.adverts, 5);
+          window.setDisabledFormFields(filtersForm, false);
         }, window.errorHandler);
   };
 
@@ -87,9 +91,9 @@
   function makePageDisabled() {
     var mapPins = mapMain.querySelectorAll('.map__pin');
     var mapCard = document.querySelector('.map__card');
-    mapPins.forEach(function (i) {
-      if (i !== window.mapPinMain) {
-        i.remove();
+    mapPins.forEach(function (pinItem) {
+      if (pinItem !== window.mapPinMain) {
+        pinItem.remove();
       }
     });
     if (mapCard) {

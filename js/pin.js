@@ -14,13 +14,13 @@
   }
 
   // Создание 1 метки объявления
-  window.createAdvertItem = function (data, id) {
+  window.createAdvertItem = function (data) {
     var advertElement = mapPinsItem.cloneNode(true);
 
     advertElement.style = 'left:' + (data.location.x + getSizeMapPin('width')) + 'px; top:' + (data.location.y + getSizeMapPin('height')) + 'px;';
     advertElement.querySelector('img').src = data.author.avatar;
     advertElement.querySelector('img').alt = data.offer.title;
-    advertElement.dataset.id = id;
+    advertElement.dataset.id = data.id;
     return advertElement;
   };
 })();
