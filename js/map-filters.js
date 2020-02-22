@@ -14,6 +14,24 @@
     return document.querySelector('.map__card');
   }
 
+  function getFilters () {
+    var inputs = [houseType, housePrice, houseRooms, houseGuests];
+    var filters = {};
+    
+    inputs.forEach(function (input) {
+      filters[input.name] = input.value;
+    });
+    
+    filters[houseFeatures.id] =  {};
+    Array.from(houseFeatures.elements).forEach(function (feature) {
+      filters[houseFeatures.id][feature.value] = feature.checked;
+    });
+    console.dir(filters);
+    return filters;
+  }
+
+  getFilters();
+
   // Коллекция DOM - элементов пинов
   function getMapPins() {
     return document.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -21,9 +39,10 @@
 
   // Фильтрация поля "Тип жилья"
   houseType.addEventListener('change', function () {
-    var filteredData = filterByPropertyType(window.adverts, houseType.value); // Массив отфильтрованных данных
+    var filteredData = window.filterData(window.adverts, getFilters()); // Массив отфильтрованных данных
     var mapPins = getMapPins();
     var mapCard = getMapCard();
+console.dir(filteredData);
 
     mapPins.forEach(function (item) {
       item.remove();
@@ -36,22 +55,10 @@
     }
 
   });
-
-  // Получаем массив элементов, подходящих под фильтрацию
-  function filterByPropertyType(data, type) {
-    if (type === 'any') {
-      return data;
-    }
-
-    return data.filter(function (dataItem) {
-      return dataItem.offer.type === type;
-    });
-  }
-
 
   // Фильтрация поля "Цена"
   housePrice.addEventListener('change', function () {
-    var filteredData = filterByPrice(window.adverts, housePrice.value);
+    var filteredData = window.filterData(window.adverts, getFilters());
     var mapPins = getMapPins();
     var mapCard = getMapCard();
 
@@ -67,31 +74,12 @@
 
   });
 
-  function filterByPrice(data, price) {
-    switch (price) {
-      case 'middle':
-        return data.filter(function (dataItem) {
-          return dataItem.offer.price >= 10000 && dataItem.offer.price <= 50000;
-        });
-
-      case 'low':
-        return data.filter(function (dataItem) {
-          return dataItem.offer.price <= 10000;
-        });
-
-      case 'high':
-        return data.filter(function (dataItem) {
-          return dataItem.offer.price >= 50000;
-        });
-    }
-    return data;
-  }
 
   // Фильтрация поля 'Число комнат'
   houseRooms.addEventListener('change', function () {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredData = filteredByRooms(window.adverts, houseRooms.value);
+    var filteredData = window.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
@@ -105,14 +93,66 @@
 
   });
 
-  function filteredByRooms(data, rooms) {
-    if (rooms === 'any') {
-      return data;
+
+  // Фильтрация поля "Число гостей"
+  houseGuests.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredData = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
+    });
+
+    window.renderAdvert(filteredData, 5);
+
+    if (mapCard) {
+      mapCard.remove();
     }
 
-    return data.filter(function (dataItem) {
-      return dataItem.offer.rooms === Number(rooms);
+  });
+
+
+  // Фильтрация поля "Удобства"
+  var mapFeatures = houseFeatures.querySelectorAll('.map__feature');
+  var wifiFeature = houseFeatures.querySelector('#filter-wifi');
+  var dishwasherFeature = houseFeatures.querySelector('#filter-dishwasher');
+  var parkinfFeature = houseFeatures.querySelector('#filter-parking');
+  var washerFeature = houseFeatures.querySelector('#filter-washer');
+  var elevatorFeature = houseFeatures.querySelector('#filter-elevator');
+  var conditionerFeature = houseFeatures.querySelector('#filter-conditioner');
+
+
+  wifiFeature.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredDataByWifi = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
     });
-  }
+
+    window.renderAdvert(filteredDataByWifi, 5);
+
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
+
+  dishwasherFeature.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredDataByDishWasher = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
+    });
+
+    window.renderAdvert(filteredDataByDishWasher, 5);
+
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
 
 })();
