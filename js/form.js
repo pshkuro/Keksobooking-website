@@ -102,4 +102,59 @@
     window.dataForm.reset();
   });
 
+  // Загрузка аватарки и фотографии жилья
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var propertyPhotoPreview = document.querySelector('.ad-form__photo');
+  var propertyPhotoFileChooser = document.querySelector('.ad-form__input');
+  var headerPreview = document.querySelector('.ad-form-header__preview img');
+  var headerFileChooser = document.querySelector('.ad-form-header__input');
+
+  headerFileChooser.addEventListener('change', function () {
+    var file = headerFileChooser.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        headerPreview.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  });
+
+
+  propertyPhotoFileChooser.addEventListener('change', function () {
+    var image = propertyPhotoPreview.querySelector('img');
+    if (image === null) {
+      image = document.createElement('img');
+      propertyPhotoPreview.append(image);
+      image.width = propertyPhotoPreview.offsetWidth;
+      image.height = propertyPhotoPreview.offsetHeight;
+    }
+
+    var file = propertyPhotoFileChooser.files[0];
+    var fileName = file.name.toLowerCase();
+
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        image.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  });
+
 })();
