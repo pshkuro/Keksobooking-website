@@ -8,7 +8,7 @@
   var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
 
   // Отображение меток объявлений на странице
-  window.renderAdvert = function (data, k) {
+  window.renderAdvert = window.debounce(function (data, k) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < data.length && i < k; i++) {
@@ -16,7 +16,7 @@
     }
 
     mapPinsElement.appendChild(fragment);
-  };
+  });
 
   // Отображаем карточку объявления при клике на соотвсетвующую метку
   var mapFilterContainerElement = document.querySelector('.map__filters-container');
