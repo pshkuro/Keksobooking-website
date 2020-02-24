@@ -9,24 +9,29 @@
   var houseRooms = filtersForm.querySelector('#housing-rooms');
   var houseGuests = filtersForm.querySelector('#housing-guests');
   var houseFeatures = filtersForm.querySelector('#housing-features');
+  var wifiFeature = houseFeatures.querySelector('#filter-wifi');
+  var dishwasherFeature = houseFeatures.querySelector('#filter-dishwasher');
+  var parkinfFeature = houseFeatures.querySelector('#filter-parking');
+  var washerFeature = houseFeatures.querySelector('#filter-washer');
+  var elevatorFeature = houseFeatures.querySelector('#filter-elevator');
+  var conditionerFeature = houseFeatures.querySelector('#filter-conditioner');
 
   function getMapCard() {
     return document.querySelector('.map__card');
   }
 
-  function getFilters () {
+  function getFilters() {
     var inputs = [houseType, housePrice, houseRooms, houseGuests];
     var filters = {};
-    
+
     inputs.forEach(function (input) {
       filters[input.name] = input.value;
     });
-    
-    filters[houseFeatures.id] =  {};
+
+    filters[houseFeatures.id] = {};
     Array.from(houseFeatures.elements).forEach(function (feature) {
       filters[houseFeatures.id][feature.value] = feature.checked;
     });
-    console.dir(filters);
     return filters;
   }
 
@@ -42,7 +47,6 @@
     var filteredData = window.filterData(window.adverts, getFilters()); // Массив отфильтрованных данных
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-console.dir(filteredData);
 
     mapPins.forEach(function (item) {
       item.remove();
@@ -114,15 +118,6 @@ console.dir(filteredData);
 
 
   // Фильтрация поля "Удобства"
-  var mapFeatures = houseFeatures.querySelectorAll('.map__feature');
-  var wifiFeature = houseFeatures.querySelector('#filter-wifi');
-  var dishwasherFeature = houseFeatures.querySelector('#filter-dishwasher');
-  var parkinfFeature = houseFeatures.querySelector('#filter-parking');
-  var washerFeature = houseFeatures.querySelector('#filter-washer');
-  var elevatorFeature = houseFeatures.querySelector('#filter-elevator');
-  var conditionerFeature = houseFeatures.querySelector('#filter-conditioner');
-
-
   wifiFeature.addEventListener('change', function () {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
@@ -149,6 +144,70 @@ console.dir(filteredData);
     });
 
     window.renderAdvert(filteredDataByDishWasher, 5);
+
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
+
+  parkinfFeature.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredDataByParking = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
+    });
+
+    window.renderAdvert(filteredDataByParking, 5);
+
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
+
+  washerFeature.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredDataByWasher = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
+    });
+
+    window.renderAdvert(filteredDataByWasher, 5);
+
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
+
+  elevatorFeature.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredDataByElevetor = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
+    });
+
+    window.renderAdvert(filteredDataByElevetor, 5);
+
+    if (mapCard) {
+      mapCard.remove();
+    }
+  });
+
+  conditionerFeature.addEventListener('change', function () {
+    var mapPins = getMapPins();
+    var mapCard = getMapCard();
+    var filteredDataByConditioner = window.filterData(window.adverts, getFilters());
+
+    mapPins.forEach(function (item) {
+      item.remove();
+    });
+
+    window.renderAdvert(filteredDataByConditioner, 5);
 
     if (mapCard) {
       mapCard.remove();

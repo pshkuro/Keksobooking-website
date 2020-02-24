@@ -1,37 +1,25 @@
 'use strict';
 
+// Модуль фильтрации получаемых с сервера данных
 (function () {
-  var mock = {
-    'housing-type': 'bungalo',
-    'housing-price': 'low',
-    'housing-rooms': '2',
-    'housing-guests': '1',
-    'housing-features': {
-      'wifi': true,
-      'dishwasher': true,
-      'washer': true,
-      'parking': false,
-      'elevator': false,
-      'conditioner': false
-    }
-  };
-
   var filterFunctions = {
     'housing-type': filterByHousingType,
     'housing-price': filterByHousingPrice,
-    'housing-rooms': filteredByHousingRooms,
-    'housing-guests': filteredByHousingGuests,
-    'housing-features': filteredByHosungFeatures
+    'housing-rooms': filterByHousingRooms,
+    'housing-guests': filterByHousingGuests,
+    'housing-features': filterByHosungFeatures
   };
 
   function filterData(data, filters) {
     var filteredData = data;
 
     for (var filter in filters) {
-      var filterValue = filters[filter];
-      var filterFunction = filterFunctions[filter];
+      if (filters.hasOwnProperty(filter)) {
+        var filterValue = filters[filter];
+        var filterFunction = filterFunctions[filter];
 
-      filteredData = filterFunction(filteredData, filterValue);
+        filteredData = filterFunction(filteredData, filterValue);
+      }
     }
 
     return filteredData;
@@ -72,7 +60,7 @@
   }
 
   // ФФ по кол-ву комнат
-  function filteredByHousingRooms(data, rooms) {
+  function filterByHousingRooms(data, rooms) {
     if (rooms === 'any') {
       return data;
     }
@@ -83,7 +71,7 @@
   }
 
   // ФФ по кол-ву гостей
-  function filteredByHousingGuests(data, guests) {
+  function filterByHousingGuests(data, guests) {
     if (guests === 'any') {
       return data;
     }
@@ -94,28 +82,22 @@
   }
 
   // ФФ по удобствам
-  function filteredByHosungFeatures(data, features) {
+  function filterByHosungFeatures(data, features) {
     var filteredData = data;
 
     for (var feature in features) {
-      var filterValue = features[feature];
-      if(filterValue === true) {
-        filteredData = filteredData.filter(function (dataItem) {
-          return dataItem.offer.features.includes(feature);
-        });
-      };
+      if (features.hasOwnProperty(feature)) {
+        var filterValue = features[feature];
+        if (filterValue === true) {
+          filteredData = filteredData.filter(function (dataItem) {
+            return dataItem.offer.features.includes(feature);
+          });
+        }
+      }
     }
 
     return filteredData;
   }
-
-  //   'wifi': true,
-  //   'dishwasher': true,
-  //   'washer': true,
-  //   'parking': false,
-  //   'elevator': false,
-  //   'conditioner': false
-
 
   window.filterData = filterData;
 })();
