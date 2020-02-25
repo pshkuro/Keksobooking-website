@@ -66,6 +66,7 @@
     for (var i = 0; i < requirements.length; i++) {
       var requirement = requirements[i];
       housePriceSelect.setAttribute('min', requirement);
+      housePriceSelect.placeholder = requirement;
     }
   }
   setMinPrice();
@@ -96,11 +97,6 @@
 
   setTimeinAndTimeout();
 
-  var resetButton = document.querySelector('.ad-form__reset');
-
-  resetButton.addEventListener('click', function removeListener() {
-    window.dataForm.reset();
-  });
 
   // Загрузка аватарки и фотографии жилья
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
@@ -108,8 +104,9 @@
   var propertyPhotoFileChooser = document.querySelector('.ad-form__input');
   var headerPreview = document.querySelector('.ad-form-header__preview img');
   var headerFileChooser = document.querySelector('.ad-form-header__input');
+  var resetForm = document.querySelector('.ad-form__reset');
 
-  headerFileChooser.addEventListener('change', function () {
+  function uploadHeaderPhoto() {
     var file = headerFileChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -126,10 +123,21 @@
 
       reader.readAsDataURL(file);
     }
+  }
+
+  var main = document.querySelector('main');
+  main.addEventListener('pageactive', function () {
+    propertyPhotoFileChooser.addEventListener('change', uploadPropertyPhotos);
+    headerFileChooser.addEventListener('change', uploadHeaderPhoto);
+  });
+
+  main.addEventListener('pagedisabled', function () {
+    propertyPhotoFileChooser.removeEventListener('change', uploadPropertyPhotos);
+    headerFileChooser.removeEventListener('change', uploadHeaderPhoto);
   });
 
 
-  propertyPhotoFileChooser.addEventListener('change', function () {
+  function uploadPropertyPhotos() {
     var image = propertyPhotoPreview.querySelector('img');
     if (image === null) {
       image = document.createElement('img');
@@ -155,6 +163,25 @@
 
       reader.readAsDataURL(file);
     }
+  }
+
+  var HEADER_PREVIEW_PICTURE = 'img/muffin-grey.svg';
+  function removeUploadedPictures() {
+    headerPreview.src = HEADER_PREVIEW_PICTURE;
+    var image = propertyPhotoPreview.querySelector('img');
+    if (image) {
+      propertyPhotoPreview.removeChild(image);
+    }
+  }
+
+  resetForm.addEventListener('click', function () {
+    window.dataForm.reset();
+    window.mapState.makePageDisabled();
+    removeUploadedPictures();
   });
+
+  window.form = {
+    removeUploadedPictures: removeUploadedPictures
+  };
 
 })();

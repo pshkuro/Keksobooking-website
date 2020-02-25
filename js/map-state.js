@@ -74,6 +74,7 @@
     window.setDisabledFormFields(window.dataForm, false);
     window.dataForm.classList.remove('ad-form--disabled');
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
+    dispatchPageActiveEvent();
     // Получила данные с сервера и отобразила. В качестве параметоров (onLoad - анонимная функция, onError).
     window.getAdverts(
         function (data) {
@@ -103,6 +104,8 @@
     window.dataForm.classList.add('ad-form--disabled');
     startPageState();
     restoreMapPinMainPosition();
+    dispatchPageDisabledEvent();
+    window.form.removeUploadedPictures();
   }
 
   var mainPage = document.querySelector('main');
@@ -169,7 +172,6 @@
     evt.preventDefault();
   });
 
-
   function getPinLocation(location, size) {
     var pinLocation = (parseInt(location, 10) + size);
     return Math.round(pinLocation);
@@ -198,4 +200,22 @@
 
   window.updateFormAddress = updateFormAddress;
   window.MAP_PIN_HEIGHT = MAP_PIN_MAIN_HEIGHT + MAP_PIN_MAIN_TIP_HEIGHT;
+
+  var pageActiveEvent = new Event('pageactive');
+  var pageDisabledEvent = new Event('pagedisabled');
+
+  // Функция вызова события
+  function dispatchPageActiveEvent() {
+    mainPage.dispatchEvent(pageActiveEvent);
+  }
+
+
+  function dispatchPageDisabledEvent() {
+    mainPage.dispatchEvent(pageDisabledEvent);
+  }
+
+  window.mapState = {
+    makePageDisabled: makePageDisabled
+  };
+
 })();

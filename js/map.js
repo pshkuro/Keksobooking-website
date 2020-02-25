@@ -32,6 +32,7 @@
       var mapPinData = window.adverts[mapId]; // Передаю в качестве данных - данные с сервера
       var cardItem = window.createCardItem(mapPinData);
       var cardItemCloseButton = cardItem.querySelector('.popup__close');
+      // mapPin.classList.add('map__pin--active'); ДОРАБОТАТЬ
 
       if (prevCardItem) {
         prevCardItem.remove();
