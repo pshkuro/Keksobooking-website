@@ -119,6 +119,7 @@
     dispatchPageDisabledEvent();
     window.form.removeUploadedPictures();
     window.mapFilters.filtersForm.reset();
+    window.form.setMinPrice();
   }
 
   var mainPage = document.querySelector('main');

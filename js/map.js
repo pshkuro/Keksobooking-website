@@ -6,6 +6,9 @@
 (function () {
 
   var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
+  var mapFilterContainerElement = document.querySelector('.map__filters-container');
+  var prevCardItem = null;
+  var activeMapPin = null;
 
   // Отображение меток объявлений на странице
   var renderAdvert = window.debounce.debounce(function (data, k) {
@@ -19,11 +22,6 @@
   });
 
   // Отображаем карточку объявления при клике на соотвсетвующую метку
-  var mapFilterContainerElement = document.querySelector('.map__filters-container');
-  var prevCardItem = null;
-  var activeMapPin = null;
-
-
   function showMapPins(evt) {
     var clickElement = evt.target;
     // Получаем значение по клику. Если null то клик произошел не на кнопку(мы ищем ее по селектору)
@@ -34,9 +32,11 @@
       var mapPinData = window.adverts[mapId]; // Передаю в качестве данных - данные с сервера
       var cardItem = window.card.createCardItem(mapPinData);
       var cardItemCloseButton = cardItem.querySelector('.popup__close');
+
       if (activeMapPin) {
         activeMapPin.classList.remove('map__pin--active');
       }
+
       mapPin.classList.add('map__pin--active');
       activeMapPin = mapPin;
 
@@ -73,9 +73,11 @@
   var dragStartHandle = function () {
     window.mapState.updateFormAddress();
   };
+
   var dragMoveHandle = function () {
     window.mapState.updateFormAddress();
   };
+
   var dragEndHandle = function () {
     window.mapState.updateFormAddress();
   };

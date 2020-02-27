@@ -1,12 +1,23 @@
 'use strict';
 // Модуль работы с формами
 (function () {
+
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var HEADER_PREVIEW_PICTURE = 'img/muffin-grey.svg';
+  var timeinSelect = window.mapState.dataForm.elements['timein'];
+  var timeoutSelect = window.mapState.dataForm.elements['timeout'];
+  var propertyPhotoPreview = document.querySelector('.ad-form__photo');
+  var propertyPhotoFileChooser = document.querySelector('.ad-form__input');
+  var headerPreview = document.querySelector('.ad-form-header__preview img');
+  var headerFileChooser = document.querySelector('.ad-form-header__input');
+  var resetButton = document.querySelector('.ad-form__reset');
+
+
   // Валидация
   // Поля Комнаты и Количество мест
   function validateRoomNumbersAndCapacity() {
     var roomNumbersSelect = window.mapState.dataForm.elements['room_number'];
     var capacitySelect = window.mapState.dataForm.elements['capacity'];
-
     var roomNumbers = roomNumbersSelect.value;
     var capacity = capacitySelect.value;
 
@@ -64,9 +75,6 @@
   setMinPrice();
 
   // Поля Заезд и выезд
-  var timeinSelect = window.mapState.dataForm.elements['timein'];
-  var timeoutSelect = window.mapState.dataForm.elements['timeout'];
-
   function setTimeIn() {
     var timein = timeinSelect.value;
     timeoutSelect.value = timein;
@@ -79,13 +87,6 @@
 
 
   // Загрузка аватарки и фотографии жилья
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var propertyPhotoPreview = document.querySelector('.ad-form__photo');
-  var propertyPhotoFileChooser = document.querySelector('.ad-form__input');
-  var headerPreview = document.querySelector('.ad-form-header__preview img');
-  var headerFileChooser = document.querySelector('.ad-form-header__input');
-  var resetButton = document.querySelector('.ad-form__reset');
-
   function uploadHeaderPhoto() {
     var file = headerFileChooser.files[0];
     var fileName = file.name.toLowerCase();
@@ -108,15 +109,15 @@
 
   function uploadPropertyPhotos() {
     var image = propertyPhotoPreview.querySelector('img');
+    var file = propertyPhotoFileChooser.files[0];
+    var fileName = file.name.toLowerCase();
+
     if (image === null) {
       image = document.createElement('img');
       propertyPhotoPreview.append(image);
       image.width = propertyPhotoPreview.offsetWidth;
       image.height = propertyPhotoPreview.offsetHeight;
     }
-
-    var file = propertyPhotoFileChooser.files[0];
-    var fileName = file.name.toLowerCase();
 
 
     var matches = FILE_TYPES.some(function (it) {
@@ -134,7 +135,6 @@
     }
   }
 
-  var HEADER_PREVIEW_PICTURE = 'img/muffin-grey.svg';
   function removeUploadedPictures() {
     headerPreview.src = HEADER_PREVIEW_PICTURE;
     var image = propertyPhotoPreview.querySelector('img');
@@ -142,6 +142,7 @@
       propertyPhotoPreview.removeChild(image);
     }
   }
+
   function resetForm() {
     window.mapState.dataForm.reset();
     window.mapState.makePageDisabled();
@@ -171,7 +172,8 @@
   });
 
   window.form = {
-    removeUploadedPictures: removeUploadedPictures
+    removeUploadedPictures: removeUploadedPictures,
+    setMinPrice: setMinPrice
   };
 
 })();
