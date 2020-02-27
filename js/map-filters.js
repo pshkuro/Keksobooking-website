@@ -3,7 +3,7 @@
 // Модуль работы с формой фильтрации (фильтрация Pins)
 (function () {
 
-  var filtersForm = document.querySelector('.map__filters-container');
+  var filtersForm = document.querySelector('.map__filters');
   var houseType = filtersForm.querySelector('#housing-type');
   var housePrice = filtersForm.querySelector('#housing-price');
   var houseRooms = filtersForm.querySelector('#housing-rooms');
@@ -11,7 +11,7 @@
   var houseFeatures = filtersForm.querySelector('#housing-features');
   var wifiFeature = houseFeatures.querySelector('#filter-wifi');
   var dishwasherFeature = houseFeatures.querySelector('#filter-dishwasher');
-  var parkinfFeature = houseFeatures.querySelector('#filter-parking');
+  var parkingFeature = houseFeatures.querySelector('#filter-parking');
   var washerFeature = houseFeatures.querySelector('#filter-washer');
   var elevatorFeature = houseFeatures.querySelector('#filter-elevator');
   var conditionerFeature = houseFeatures.querySelector('#filter-conditioner');
@@ -43,7 +43,7 @@
   }
 
   // Фильтрация поля "Тип жилья"
-  houseType.addEventListener('change', function () {
+  function showHouseTypeFilterData() {
     var filteredData = window.filterData(window.adverts, getFilters()); // Массив отфильтрованных данных
     var mapPins = getMapPins();
     var mapCard = getMapCard();
@@ -58,10 +58,10 @@
       mapCard.remove();
     }
 
-  });
+  }
 
   // Фильтрация поля "Цена"
-  housePrice.addEventListener('change', function () {
+  function showHousePriceFilterData() {
     var filteredData = window.filterData(window.adverts, getFilters());
     var mapPins = getMapPins();
     var mapCard = getMapCard();
@@ -76,11 +76,11 @@
       mapCard.remove();
     }
 
-  });
+  }
 
 
   // Фильтрация поля 'Число комнат'
-  houseRooms.addEventListener('change', function () {
+  function showHouseRoomsFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredData = window.filterData(window.adverts, getFilters());
@@ -95,11 +95,11 @@
       mapCard.remove();
     }
 
-  });
+  }
 
 
   // Фильтрация поля "Число гостей"
-  houseGuests.addEventListener('change', function () {
+  function showHouseGuestsFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredData = window.filterData(window.adverts, getFilters());
@@ -114,11 +114,11 @@
       mapCard.remove();
     }
 
-  });
+  }
 
 
   // Фильтрация поля "Удобства"
-  wifiFeature.addEventListener('change', function () {
+  function showWifiFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredDataByWifi = window.filterData(window.adverts, getFilters());
@@ -132,9 +132,9 @@
     if (mapCard) {
       mapCard.remove();
     }
-  });
+  }
 
-  dishwasherFeature.addEventListener('change', function () {
+  function showDishwasherFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredDataByDishWasher = window.filterData(window.adverts, getFilters());
@@ -148,9 +148,9 @@
     if (mapCard) {
       mapCard.remove();
     }
-  });
+  }
 
-  parkinfFeature.addEventListener('change', function () {
+  function showParkingFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredDataByParking = window.filterData(window.adverts, getFilters());
@@ -164,9 +164,10 @@
     if (mapCard) {
       mapCard.remove();
     }
-  });
+  }
 
-  washerFeature.addEventListener('change', function () {
+
+  function showWasherFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredDataByWasher = window.filterData(window.adverts, getFilters());
@@ -180,9 +181,9 @@
     if (mapCard) {
       mapCard.remove();
     }
-  });
+  }
 
-  elevatorFeature.addEventListener('change', function () {
+  function showElevatorFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredDataByElevetor = window.filterData(window.adverts, getFilters());
@@ -196,9 +197,9 @@
     if (mapCard) {
       mapCard.remove();
     }
-  });
+  }
 
-  conditionerFeature.addEventListener('change', function () {
+  function showConditionerFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
     var filteredDataByConditioner = window.filterData(window.adverts, getFilters());
@@ -212,6 +213,36 @@
     if (mapCard) {
       mapCard.remove();
     }
+  }
+
+  window.mapState.mainPage.addEventListener('pageactive', function () {
+    houseType.addEventListener('change', showHouseTypeFilterData);
+    housePrice.addEventListener('change', showHousePriceFilterData);
+    houseRooms.addEventListener('change', showHouseRoomsFilterData);
+    houseGuests.addEventListener('change', showHouseGuestsFilterData);
+    wifiFeature.addEventListener('change', showWifiFeatureFilterData);
+    dishwasherFeature.addEventListener('change', showDishwasherFilterData);
+    parkingFeature.addEventListener('change', showParkingFeatureFilterData);
+    washerFeature.addEventListener('change', showWasherFeatureFilterData);
+    elevatorFeature.addEventListener('change', showElevatorFeatureFilterData);
+    conditionerFeature.addEventListener('change', showConditionerFeatureFilterData);
   });
+
+  window.mapState.mainPage.addEventListener('pagedisabled', function () {
+    houseType.removeEventListener('change', showHouseTypeFilterData);
+    housePrice.removeEventListener('change', showHousePriceFilterData);
+    houseRooms.removeEventListener('change', showHouseRoomsFilterData);
+    houseGuests.removeEventListener('change', showHouseGuestsFilterData);
+    wifiFeature.removeEventListener('change', showWifiFeatureFilterData);
+    dishwasherFeature.removeEventListener('change', showDishwasherFilterData);
+    parkingFeature.removeEventListener('change', showParkingFeatureFilterData);
+    washerFeature.removeEventListener('change', showWasherFeatureFilterData);
+    elevatorFeature.removeEventListener('change', showElevatorFeatureFilterData);
+    conditionerFeature.removeEventListener('change', showConditionerFeatureFilterData);
+  });
+
+  window.mapFilters = {
+    filtersForm: filtersForm
+  };
 
 })();

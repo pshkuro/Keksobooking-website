@@ -19,7 +19,7 @@
   };
 
   // Создание 1 карточки объявления
-  window.createCardItem = function (data) {
+  function createCardItem(data) {
     var advertElement = mapCardItem.cloneNode(true);
 
     // Функция проверки блока на существование данных и их добавление
@@ -70,7 +70,7 @@
     var features = data.offer.features;
     var popupFeaturesElement = advertElement.querySelector('.popup__features');
     var featuresRender = function () {
-      popupFeaturesElement.textContent = features;
+      popupFeaturesElement.textContent = features.join(', ');
     };
     createDataCardItem(popupFeaturesElement, features, featuresRender);
 
@@ -113,6 +113,8 @@
     createDataCardItem(popupPhotos, photos, photosRender);
 
     return advertElement;
-  };
+  }
+
+  window.createCardItem = createCardItem;
 
 })();

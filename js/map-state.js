@@ -8,13 +8,25 @@
   var MAP_PIN_MAIN_TIP_HEIGHT = 22;
   var ENTER = 'Enter';
   var ESC = 'Escape';
-
   var isDisabled = true; // Проверка в каком состоянии находится страинца
   window.dataForm = document.querySelector('.ad-form');
   var filtersForm = document.querySelector('.map__filters');
   var addressField = window.dataForm.querySelector('#address');
   var mapMain = document.querySelector('.map');
   window.mapPinMain = document.querySelector('.map__pin--main');
+
+  var pageActiveEvent = new Event('pageactive');
+  var pageDisabledEvent = new Event('pagedisabled');
+
+  // Функция вызова события
+  function dispatchPageActiveEvent() {
+    mainPage.dispatchEvent(pageActiveEvent);
+  }
+
+
+  function dispatchPageDisabledEvent() {
+    mainPage.dispatchEvent(pageDisabledEvent);
+  }
 
   // Вставляем адрес формы поля Адрес в соотв координатами центра метки
   // Координаты центра метки по X и по Y
@@ -36,8 +48,8 @@
 
   function startPageState() {
     isDisabled = true;
-    window.setDisabledFormFields(window.dataForm, true);
-    window.setDisabledFormFields(filtersForm, true);
+    window.util.setDisabledFormFields(window.dataForm, true);
+    window.util.setDisabledFormFields(filtersForm, true);
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY);
   }
 
@@ -45,7 +57,7 @@
 
 
   // Обработчик ошибок
-  window.errorHandler = function (errorMessage) {
+  function errorHandler(errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -55,7 +67,7 @@
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
-  };
+  }
 
   var initialTop = window.mapPinMain.style.top;
   var initialLeft = window.mapPinMain.style.left;
@@ -71,12 +83,12 @@
   var makePageActive = function () {
     isDisabled = false;
     mapMain.classList.remove('map--faded');
-    window.setDisabledFormFields(window.dataForm, false);
+    window.util.setDisabledFormFields(window.dataForm, false);
     window.dataForm.classList.remove('ad-form--disabled');
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
     dispatchPageActiveEvent();
     // Получила данные с сервера и отобразила. В качестве параметоров (onLoad - анонимная функция, onError).
-    window.getAdverts(
+    window.advertsService.getAdverts(
         function (data) {
           window.adverts = data.map(function (item, index) {
             item.id = index;
@@ -84,8 +96,8 @@
           });
 
           window.renderAdvert(window.adverts, 5);
-          window.setDisabledFormFields(filtersForm, false);
-        }, window.errorHandler);
+          window.util.setDisabledFormFields(filtersForm, false);
+        }, errorHandler);
   };
 
   // Функция блокировки страницы
@@ -106,6 +118,7 @@
     restoreMapPinMainPosition();
     dispatchPageDisabledEvent();
     window.form.removeUploadedPictures();
+    window.mapFilters.filtersForm.reset();
   }
 
   var mainPage = document.querySelector('main');
@@ -163,14 +176,14 @@
   }
 
   // Отправка данных формы на сервер
-  window.dataForm.addEventListener('submit', function (evt) {
-    window.sendData(new FormData(window.dataForm), function () {
+  function sendFormData(evt) {
+    window.advertsService.sendData(new FormData(window.dataForm), function () {
       window.dataForm.reset(); // Сбрасываем форму
       makePageDisabled(); // Возвращаем страницу в disabled состояние
       createSuccessMessage();
     }, createErrorMessage);
     evt.preventDefault();
-  });
+  }
 
   function getPinLocation(location, size) {
     var pinLocation = (parseInt(location, 10) + size);
@@ -185,37 +198,37 @@
     setAddress(mapPinLocationX, mapPinLocationY, MAP_PIN_MAIN_TIP_HEIGHT);
   }
 
-
-  window.mapPinMain.addEventListener('mousedown', function (evt) {
+  // Активация страницы при нажатии на map-main-pin
+  function activePageByMouse(evt) {
     if (evt.which === 1 && isDisabled === true) {
       makePageActive();
     }
-  });
+  }
 
-  window.mapPinMain.addEventListener('keydown', function (evt) {
+  function activePageByKey(evt) {
     if (evt.key === ENTER && isDisabled === true) {
       makePageActive();
     }
+  }
+
+  window.mapPinMain.addEventListener('mousedown', activePageByMouse);
+  window.mapPinMain.addEventListener('keydown', activePageByKey);
+
+  mainPage.addEventListener('pageactive', function () {
+    window.dataForm.addEventListener('submit', sendFormData);
   });
 
-  window.updateFormAddress = updateFormAddress;
-  window.MAP_PIN_HEIGHT = MAP_PIN_MAIN_HEIGHT + MAP_PIN_MAIN_TIP_HEIGHT;
+  mainPage.addEventListener('pagedisabled', function () {
+    window.dataForm.removeEventListener('submit', sendFormData);
+  });
 
-  var pageActiveEvent = new Event('pageactive');
-  var pageDisabledEvent = new Event('pagedisabled');
-
-  // Функция вызова события
-  function dispatchPageActiveEvent() {
-    mainPage.dispatchEvent(pageActiveEvent);
-  }
-
-
-  function dispatchPageDisabledEvent() {
-    mainPage.dispatchEvent(pageDisabledEvent);
-  }
+  var MAP_PIN_HEIGHT = MAP_PIN_MAIN_HEIGHT + MAP_PIN_MAIN_TIP_HEIGHT;
 
   window.mapState = {
-    makePageDisabled: makePageDisabled
+    makePageDisabled: makePageDisabled,
+    mainPage: mainPage,
+    updateFormAddress: updateFormAddress,
+    MAP_PIN_HEIGHT: MAP_PIN_HEIGHT
   };
 
 })();

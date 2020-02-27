@@ -21,8 +21,10 @@
   // Отображаем карточку объявления при клике на соотвсетвующую метку
   var mapFilterContainerElement = document.querySelector('.map__filters-container');
   var prevCardItem = null;
+  var activeMapPin = null;
 
-  mapPinsElement.addEventListener('click', function (evt) {
+
+  function showMapPins(evt) {
     var clickElement = evt.target;
     // Получаем значение по клику. Если null то клик произошел не на кнопку(мы ищем ее по селектору)
     var mapPin = clickElement.closest('.map__pin:not(.map__pin--main)');
@@ -32,7 +34,11 @@
       var mapPinData = window.adverts[mapId]; // Передаю в качестве данных - данные с сервера
       var cardItem = window.createCardItem(mapPinData);
       var cardItemCloseButton = cardItem.querySelector('.popup__close');
-      // mapPin.classList.add('map__pin--active'); ДОРАБОТАТЬ
+      if (activeMapPin) {
+        activeMapPin.classList.remove('map__pin--active');
+      }
+      mapPin.classList.add('map__pin--active');
+      activeMapPin = mapPin;
 
       if (prevCardItem) {
         prevCardItem.remove();
@@ -53,17 +59,25 @@
         }
       });
     }
+  }
+
+  window.mapState.mainPage.addEventListener('pageactive', function () {
+    mapPinsElement.addEventListener('click', showMapPins);
+  });
+
+  window.mapState.mainPage.addEventListener('pagedisabled', function () {
+    mapPinsElement.removeEventListener('click', showMapPins);
   });
 
   // Перемещение mapMainPin по карте -> заполнение поля address
   var dragStartHandle = function () {
-    window.updateFormAddress();
+    window.mapState.updateFormAddress();
   };
   var dragMoveHandle = function () {
-    window.updateFormAddress();
+    window.mapState.updateFormAddress();
   };
   var dragEndHandle = function () {
-    window.updateFormAddress();
+    window.mapState.updateFormAddress();
   };
 
   window.translateElement(window.mapPinMain, {
@@ -74,7 +88,7 @@
   {
     top: 130,
     floor: 630,
-    pinHeight: window.MAP_PIN_HEIGHT
+    pinHeight: window.mapState.MAP_PIN_HEIGHT
   });
 
 })();

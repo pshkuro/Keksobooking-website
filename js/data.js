@@ -12,69 +12,69 @@
     var getTitle = function () {
       var TITLES = ['Для влюбленных', 'Большой дом для семьи', 'Прекрасный лофт', 'Небольшой участок', 'Шикарный пентхаус', 'Помещение для бизнеса', 'Жилье в центре', 'Домик у парка'];
 
-      return window.getRandomArrayItem(TITLES);
+      return window.util.getRandomArrayItem(TITLES);
     };
 
     var getAddress = function () {
-      return window.getRandomInRange(1, 100) + ', ' + window.getRandomInRange(100, 500);
+      return window.util.getRandomInRange(1, 100) + ', ' + window.util.getRandomInRange(100, 500);
     };
 
     var getPrice = function () {
       var PRICES = [1700, 1000, 20000, 5000, 1090, 990, 55500, 600];
 
-      return window.getRandomArrayItem(PRICES);
+      return window.util.getRandomArrayItem(PRICES);
     };
 
     var getType = function () {
       var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 
-      return window.getRandomArrayItem(TYPES);
+      return window.util.getRandomArrayItem(TYPES);
     };
 
     var getRooms = function () {
-      return window.getRandomInRange(1, 7);
+      return window.util.getRandomInRange(1, 7);
     };
 
     var getGuests = function () {
-      return window.getRandomInRange(1, 5);
+      return window.util.getRandomInRange(1, 5);
     };
 
     var getCheckin = function () {
       var CHECKINS = ['12:00', '13:00', '14:00'];
 
-      return window.getRandomArrayItem(CHECKINS);
+      return window.util.getRandomArrayItem(CHECKINS);
     };
 
     var getCheckout = function () {
       var CHECKOUTS = ['12:00', '13:00', '14:00'];
 
-      return window.getRandomArrayItem(CHECKOUTS);
+      return window.util.getRandomArrayItem(CHECKOUTS);
     };
 
     var getFeatures = function () {
       var FEATURESES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-      return window.getArrayRandomLength(FEATURESES);
+      return window.util.getArrayRandomLength(FEATURESES);
     };
 
     var getDescription = function () {
       var DESCRIPTIONS = ['Снимайте скорее', 'Вам очень понравится', 'Супер место для отдыха'];
 
-      return window.getRandomArrayItem(DESCRIPTIONS);
+      return window.util.getRandomArrayItem(DESCRIPTIONS);
     };
 
     var getPhotos = function () {
       var PHOTOSES = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-      return window.getArrayRandomLength(PHOTOSES);
+      return window.util.getArrayRandomLength(PHOTOSES);
     };
 
     var getX = function () {
-      return window.getRandomInRange(1, 1000);
+      return window.util.getRandomInRange(1, 1000);
     };
 
     var getY = function () {
-      return window.getRandomInRange(130, 630);
+      return window.util.getRandomInRange(130, 630);
     };
 
     for (var i = 0; i < count; i++) {
