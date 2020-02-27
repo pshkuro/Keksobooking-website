@@ -8,11 +8,11 @@
   var mapPinsElement = document.querySelector('.map__pins'); // Эл, в кот будем отрисовывать объявления
 
   // Отображение меток объявлений на странице
-  window.renderAdvert = window.debounce(function (data, k) {
+  var renderAdvert = window.debounce.debounce(function (data, k) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < data.length && i < k; i++) {
-      fragment.appendChild(window.createAdvertItem(data[i]));
+      fragment.appendChild(window.pin.createAdvertItem(data[i]));
     }
 
     mapPinsElement.appendChild(fragment);
@@ -32,7 +32,7 @@
     if (mapPin) {
       var mapId = mapPin.dataset.id;
       var mapPinData = window.adverts[mapId]; // Передаю в качестве данных - данные с сервера
-      var cardItem = window.createCardItem(mapPinData);
+      var cardItem = window.card.createCardItem(mapPinData);
       var cardItemCloseButton = cardItem.querySelector('.popup__close');
       if (activeMapPin) {
         activeMapPin.classList.remove('map__pin--active');
@@ -80,7 +80,7 @@
     window.mapState.updateFormAddress();
   };
 
-  window.translateElement(window.mapPinMain, {
+  window.dragndrop.translateElement(window.mapState.mapPinMain, {
     onDragStart: dragStartHandle,
     onDragMove: dragMoveHandle,
     onDragEnd: dragEndHandle
@@ -90,5 +90,9 @@
     floor: 630,
     pinHeight: window.mapState.MAP_PIN_HEIGHT
   });
+
+  window.map = {
+    renderAdvert: renderAdvert
+  };
 
 })();

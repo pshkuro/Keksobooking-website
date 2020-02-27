@@ -44,7 +44,7 @@
 
   // Фильтрация поля "Тип жилья"
   function showHouseTypeFilterData() {
-    var filteredData = window.filterData(window.adverts, getFilters()); // Массив отфильтрованных данных
+    var filteredData = window.dataFilter.filterData(window.adverts, getFilters()); // Массив отфильтрованных данных
     var mapPins = getMapPins();
     var mapCard = getMapCard();
 
@@ -52,7 +52,7 @@
       item.remove();
     });
 
-    window.renderAdvert(filteredData, 5);
+    window.map.renderAdvert(filteredData, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -62,7 +62,7 @@
 
   // Фильтрация поля "Цена"
   function showHousePriceFilterData() {
-    var filteredData = window.filterData(window.adverts, getFilters());
+    var filteredData = window.dataFilter.filterData(window.adverts, getFilters());
     var mapPins = getMapPins();
     var mapCard = getMapCard();
 
@@ -70,7 +70,7 @@
       item.remove();
     });
 
-    window.renderAdvert(filteredData, 5);
+    window.map.renderAdvert(filteredData, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -83,13 +83,13 @@
   function showHouseRoomsFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredData = window.filterData(window.adverts, getFilters());
+    var filteredData = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredData, 5);
+    window.map.renderAdvert(filteredData, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -102,13 +102,13 @@
   function showHouseGuestsFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredData = window.filterData(window.adverts, getFilters());
+    var filteredData = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredData, 5);
+    window.map.renderAdvert(filteredData, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -121,13 +121,13 @@
   function showWifiFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredDataByWifi = window.filterData(window.adverts, getFilters());
+    var filteredDataByWifi = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredDataByWifi, 5);
+    window.map.renderAdvert(filteredDataByWifi, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -137,13 +137,13 @@
   function showDishwasherFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredDataByDishWasher = window.filterData(window.adverts, getFilters());
+    var filteredDataByDishWasher = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredDataByDishWasher, 5);
+    window.map.renderAdvert(filteredDataByDishWasher, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -153,13 +153,13 @@
   function showParkingFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredDataByParking = window.filterData(window.adverts, getFilters());
+    var filteredDataByParking = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredDataByParking, 5);
+    window.map.renderAdvert(filteredDataByParking, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -170,13 +170,13 @@
   function showWasherFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredDataByWasher = window.filterData(window.adverts, getFilters());
+    var filteredDataByWasher = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredDataByWasher, 5);
+    window.map.renderAdvert(filteredDataByWasher, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -186,13 +186,13 @@
   function showElevatorFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredDataByElevetor = window.filterData(window.adverts, getFilters());
+    var filteredDataByElevetor = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredDataByElevetor, 5);
+    window.map.renderAdvert(filteredDataByElevetor, 5);
 
     if (mapCard) {
       mapCard.remove();
@@ -202,13 +202,13 @@
   function showConditionerFeatureFilterData() {
     var mapPins = getMapPins();
     var mapCard = getMapCard();
-    var filteredDataByConditioner = window.filterData(window.adverts, getFilters());
+    var filteredDataByConditioner = window.dataFilter.filterData(window.adverts, getFilters());
 
     mapPins.forEach(function (item) {
       item.remove();
     });
 
-    window.renderAdvert(filteredDataByConditioner, 5);
+    window.map.renderAdvert(filteredDataByConditioner, 5);
 
     if (mapCard) {
       mapCard.remove();

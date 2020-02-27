@@ -4,8 +4,8 @@
   // Валидация
   // Поля Комнаты и Количество мест
   function validateRoomNumbersAndCapacity() {
-    var roomNumbersSelect = window.dataForm.elements['room_number'];
-    var capacitySelect = window.dataForm.elements['capacity'];
+    var roomNumbersSelect = window.mapState.dataForm.elements['room_number'];
+    var capacitySelect = window.mapState.dataForm.elements['capacity'];
 
     var roomNumbers = roomNumbersSelect.value;
     var capacity = capacitySelect.value;
@@ -41,8 +41,8 @@
 
   // Цена жилья
   function setMinPrice() {
-    var typeHouseSelect = window.dataForm.elements['type'];
-    var housePriceSelect = window.dataForm.querySelector('#price');
+    var typeHouseSelect = window.mapState.dataForm.elements['type'];
+    var housePriceSelect = window.mapState.dataForm.querySelector('#price');
 
     var typeHouse = typeHouseSelect.value;
 
@@ -64,8 +64,8 @@
   setMinPrice();
 
   // Поля Заезд и выезд
-  var timeinSelect = window.dataForm.elements['timein'];
-  var timeoutSelect = window.dataForm.elements['timeout'];
+  var timeinSelect = window.mapState.dataForm.elements['timein'];
+  var timeoutSelect = window.mapState.dataForm.elements['timeout'];
 
   function setTimeIn() {
     var timein = timeinSelect.value;
@@ -143,7 +143,7 @@
     }
   }
   function resetForm() {
-    window.dataForm.reset();
+    window.mapState.dataForm.reset();
     window.mapState.makePageDisabled();
     removeUploadedPictures();
   }
@@ -151,22 +151,22 @@
   window.mapState.mainPage.addEventListener('pageactive', function () {
     propertyPhotoFileChooser.addEventListener('change', uploadPropertyPhotos);
     headerFileChooser.addEventListener('change', uploadHeaderPhoto);
-    window.dataForm.elements['room_number'].addEventListener('change', validateRoomNumbersAndCapacity);
-    window.dataForm.elements['capacity'].addEventListener('change', validateRoomNumbersAndCapacity);
-    window.dataForm.elements['type'].addEventListener('change', setMinPrice);
-    window.dataForm.querySelector('#price').addEventListener('change', setMinPrice);
-    window.dataForm.elements['timein'].addEventListener('change', setTimeIn);
-    window.dataForm.elements['timeout'].addEventListener('change', setTimeOut);
+    window.mapState.dataForm.elements['room_number'].addEventListener('change', validateRoomNumbersAndCapacity);
+    window.mapState.dataForm.elements['capacity'].addEventListener('change', validateRoomNumbersAndCapacity);
+    window.mapState.dataForm.elements['type'].addEventListener('change', setMinPrice);
+    window.mapState.dataForm.querySelector('#price').addEventListener('change', setMinPrice);
+    window.mapState.dataForm.elements['timein'].addEventListener('change', setTimeIn);
+    window.mapState.dataForm.elements['timeout'].addEventListener('change', setTimeOut);
     resetButton.addEventListener('click', resetForm);
   });
 
   window.mapState.mainPage.addEventListener('pagedisabled', function () {
     propertyPhotoFileChooser.removeEventListener('change', uploadPropertyPhotos);
     headerFileChooser.removeEventListener('change', uploadHeaderPhoto);
-    window.dataForm.elements['room_number'].removeEventListener('change', validateRoomNumbersAndCapacity);
-    window.dataForm.elements['capacity'].removeEventListener('change', validateRoomNumbersAndCapacity);
-    window.dataForm.elements['type'].removeEventListener('change', setMinPrice);
-    window.dataForm.querySelector('#price').removeEventListener('change', setMinPrice);
+    window.mapState.dataForm.elements['room_number'].removeEventListener('change', validateRoomNumbersAndCapacity);
+    window.mapState.dataForm.elements['capacity'].removeEventListener('change', validateRoomNumbersAndCapacity);
+    window.mapState.dataForm.elements['type'].removeEventListener('change', setMinPrice);
+    window.mapState.dataForm.querySelector('#price').removeEventListener('change', setMinPrice);
     resetButton.removeEventListener('click', resetForm);
   });
 

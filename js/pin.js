@@ -24,6 +24,9 @@
     return advertElement;
   }
 
-  window.createAdvertItem = createAdvertItem;
+  window.pin = {
+    createAdvertItem: createAdvertItem
+  };
+
 })();
 

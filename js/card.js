@@ -115,6 +115,8 @@
     return advertElement;
   }
 
-  window.createCardItem = createCardItem;
+  window.card = {
+    createCardItem: createCardItem
+  };
 
 })();
