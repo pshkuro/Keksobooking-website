@@ -99,5 +99,9 @@
     return filteredData;
   }
 
-  window.filterData = filterData;
+  window.dataFilter = {
+    filterData: filterData
+  };
+
+
 })();

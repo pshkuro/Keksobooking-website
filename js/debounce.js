@@ -4,7 +4,7 @@
 (function () {
   var DEBOUNCE_INTERVAL = 500; // ms
 
-  window.debounce = function (act) {
+  function debounce(act) {
     var lastTimeout = null;
 
     return function () {
@@ -16,5 +16,10 @@
         act.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
+  }
+
+  window.debounce = {
+    debounce: debounce
   };
+
 })();

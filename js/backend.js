@@ -10,7 +10,7 @@
   };
 
   // Загрузка данных c сервера
-  window.load = function (onLoad, onError, url) {
+  function load(onLoad, onError, url) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -56,10 +56,10 @@
 
 
     xhr.send();
-  };
+  }
 
   // Функция отправки данных на сервер
-  window.save = function (data, onLoad, onError, url) {
+  function save(data, onLoad, onError, url) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -105,6 +105,11 @@
     });
 
     xhr.send(data);
+  }
+
+  window.backend = {
+    load: load,
+    save: save
   };
 
 })();

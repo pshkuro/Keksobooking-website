@@ -2,7 +2,7 @@
 
 (function () {
 
-  window.translateElement = function (element, callbacks, limits) {
+  function translateElement(element, callbacks, limits) {
     element.addEventListener('mousedown', function onMouseDown(evt) {
       evt.preventDefault();
 
@@ -68,5 +68,11 @@
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     });
+  }
+
+  window.dragndrop = {
+    translateElement: translateElement
   };
+
+  window.translateElement = translateElement;
 })();

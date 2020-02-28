@@ -6,14 +6,18 @@
   var URL_SAVE = 'https://js.dump.academy/keksobooking';
 
   var getAdverts = function (onLoad, onError) {
-    window.load(onLoad, onError, URL);
+    window.backend.load(onLoad, onError, URL);
   };
 
   var sendData = function (data, onLoad, onError) {
-    window.save(data, onLoad, onError, URL_SAVE);
+    window.backend.save(data, onLoad, onError, URL_SAVE);
   };
 
-  window.getAdverts = getAdverts;
-  window.sendData = sendData;
+
+  window.advertsService = {
+    getAdverts: getAdverts,
+    sendData: sendData
+  };
+
 })();
 
