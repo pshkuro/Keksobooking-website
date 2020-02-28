@@ -88,16 +88,15 @@
     setAddress(mapPinCentralLocationX, mapPinCentralLocationY, MAP_PIN_MAIN_TIP_HEIGHT); // функция опред адреса в соотв с перемещаемой меткой
     dispatchPageActiveEvent();
     // Получила данные с сервера и отобразила. В качестве параметоров (onLoad - анонимная функция, onError).
-    window.advertsService.getAdverts(
-        function (data) {
-          window.adverts = data.map(function (item, index) {
-            item.id = index;
-            return item;
-          });
+    window.advertsService.getAdverts(function (data) {
+      window.adverts = data.map(function (item, index) {
+        item.id = index;
+        return item;
+      });
 
-          window.map.renderAdvert(window.adverts, 5);
-          window.util.setDisabledFormFields(filtersForm, false);
-        }, errorHandler);
+      window.map.renderAdvert(window.adverts, 5);
+      window.util.setDisabledFormFields(filtersForm, false);
+    }, errorHandler);
   };
 
   // Функция блокировки страницы

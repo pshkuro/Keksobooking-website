@@ -15,7 +15,9 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < data.length && i < k; i++) {
-      fragment.appendChild(window.pin.createAdvertItem(data[i]));
+      if (data[i].offer) {
+        fragment.appendChild(window.pin.createAdvertItem(data[i]));
+      }
     }
 
     mapPinsElement.appendChild(fragment);
