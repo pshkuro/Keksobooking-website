@@ -9,11 +9,11 @@
     NOT_FOUND: 404
   };
 
+  var xhr = new XMLHttpRequest();
+
   // Загрузка данных c сервера
   function load(onLoad, onError, url) {
-    var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-
     xhr.open('GET', url);
 
     xhr.addEventListener('load', function () {
@@ -60,9 +60,7 @@
 
   // Функция отправки данных на сервер
   function save(data, onLoad, onError, url) {
-    var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-
     xhr.open('POST', url);
 
     xhr.addEventListener('load', function () {
