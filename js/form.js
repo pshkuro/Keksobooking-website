@@ -76,13 +76,11 @@
 
   // Поля Заезд и выезд
   function setTimeIn() {
-    var timein = timeinSelect.value;
-    timeoutSelect.value = timein;
+    timeoutSelect.value = timeinSelect.value;
   }
 
   function setTimeOut() {
-    var timeout = timeoutSelect.value;
-    timeinSelect.value = timeout;
+    timeinSelect.value = timeoutSelect.value;
   }
 
 

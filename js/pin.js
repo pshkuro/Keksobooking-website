@@ -8,9 +8,7 @@
 
   // Получение ширины/высоты mapPin
   function getSizeMapPin(size) {
-    var valueMapPin = mapPinTemplate.content.querySelector('img')[size];
-
-    return valueMapPin;
+    return mapPinTemplate.content.querySelector('img')[size];
   }
 
   // Создание 1 метки объявления
