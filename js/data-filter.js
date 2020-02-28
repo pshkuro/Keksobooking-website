@@ -2,6 +2,10 @@
 
 // Модуль фильтрации получаемых с сервера данных
 (function () {
+
+  var MIN_PROPERTY_PRICE = 10000;
+  var MAX_PROPERTY_PRICE = 50000;
+
   var filterFunctions = {
     'housing-type': filterByHousingType,
     'housing-price': filterByHousingPrice,
@@ -43,17 +47,17 @@
     switch (price) {
       case 'middle':
         return data.filter(function (dataItem) {
-          return dataItem.offer.price >= 10000 && dataItem.offer.price <= 50000;
+          return dataItem.offer.price >= MIN_PROPERTY_PRICE && dataItem.offer.price <= MAX_PROPERTY_PRICE;
         });
 
       case 'low':
         return data.filter(function (dataItem) {
-          return dataItem.offer.price <= 10000;
+          return dataItem.offer.price <= MIN_PROPERTY_PRICE;
         });
 
       case 'high':
         return data.filter(function (dataItem) {
-          return dataItem.offer.price >= 50000;
+          return dataItem.offer.price >= MAX_PROPERTY_PRICE;
         });
     }
     return data;
