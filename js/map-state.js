@@ -8,7 +8,7 @@
   var MAP_PIN_MAIN_TIP_HEIGHT = 22;
   var ENTER = 'Enter';
   var ESC = 'Escape';
-  var isDisabled = true; // Проверка в каком состоянии находится страинца
+  var isDisabled = true; 
   var filtersForm = document.querySelector('.map__filters');
   var addressField = document.querySelector('#address');
   var mapMain = document.querySelector('.map');
